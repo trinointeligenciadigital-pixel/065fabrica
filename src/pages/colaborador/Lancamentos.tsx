@@ -3,7 +3,7 @@ import { useLocation, useParams } from "wouter";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id, Doc } from "../../../convex/_generated/dataModel";
-import { AlertTriangle, ArrowLeft, Truck, Car, DollarSign, Gift } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Truck, Car, DollarSign, Gift, CheckCircle } from "lucide-react";
 
 interface CarregamentoItem {
   produtoId: Id<"produtos">;
@@ -86,6 +86,20 @@ export default function Lancamentos() {
   const [selectedMotivo, setSelectedMotivo] = useState<Doc<"motivos_perda"> | null>(null);
   const [quantidadeStr, setQuantidadeStr] = useState("");
   const [observacao, setObservacao] = useState("");
+
+  // Comprovante states
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [receiptData, setReceiptData] = useState<{
+    tipo: string;
+    destinatario: string;
+    whatsapp?: string;
+    motorista: string;
+    veiculo: string;
+    itensText: string;
+    totalPeso: number;
+    dataHora: string;
+    colaboradorNome: string;
+  } | null>(null);
 
   // Query Saldo do Item Selecionado (Reativo)
   const saldoDisponivel = useQuery(
@@ -257,8 +271,9 @@ export default function Lancamentos() {
         });
       } else if (flow === "carregamento") {
         const payloadClienteId = (tipoCarregamento === "venda" && selectedClienteId !== "avulso" && selectedClienteId) ? (selectedClienteId as Id<"clientes">) : undefined;
+        const selectedClienteObj = payloadClienteId ? clientes?.find(c => c._id === payloadClienteId) : null;
         const payloadClienteNome = (tipoCarregamento === "venda") 
-          ? (selectedClienteId === "avulso" ? clienteNomeAvulso.trim() : (clientes?.find(c => c._id === selectedClienteId)?.nome || undefined))
+          ? (selectedClienteId === "avulso" ? clienteNomeAvulso.trim() : (selectedClienteObj?.nome || undefined))
           : undefined;
 
         await lancarCarregamentoMutation({
@@ -279,10 +294,48 @@ export default function Lancamentos() {
             quantidade: it.quantidade,
           })),
         });
-      }
 
-      // Redireciona de volta ao painel principal em caso de sucesso
-      setLocation("/colaborador/painel");
+        // Montar dados do comprovante para compartilhamento
+        const dataHoraStr = new Date().toLocaleString("pt-BR");
+        
+        let totalPeso = 0;
+        const listText = itensCarregamento.map((it) => {
+          let itemPeso = 0;
+          if (it.unidade === "pacote" && it.formatoPacoteId) {
+            const form = formatos?.find(f => f._id === it.formatoPacoteId);
+            if (form) itemPeso = it.quantidade * form.peso_kg;
+          }
+          totalPeso += itemPeso;
+          
+          const extraInfo = it.saborNome ? ` (${it.saborNome})` : (it.formatoNome ? ` (${it.formatoNome})` : "");
+          return `- ${it.quantidade} ${it.unidade}s de ${it.produtoNome}${extraInfo}`;
+        }).join("\n");
+
+        const veiculoDesc = veiculoTipo === "proprio" 
+          ? `${selectedVeiculo?.descricao} (${selectedVeiculo?.placa})` 
+          : `${terceiroDescricao} (${terceiroPlaca})`;
+
+        const colabNome = sessaoValidada?.colaborador?.nome || "Operador";
+
+        setReceiptData({
+          tipo: tipoCarregamento === "venda" ? "Venda Comercial" : "Patrocínio",
+          destinatario: tipoCarregamento === "venda" ? (payloadClienteNome || "Não informado") : (evento || "Não informado"),
+          whatsapp: selectedClienteObj?.whatsapp || undefined,
+          motorista,
+          veiculo: veiculoDesc,
+          itensText: listText,
+          totalPeso,
+          dataHora: dataHoraStr,
+          colaboradorNome: colabNome
+        });
+        
+        setShowReceipt(true);
+        setLoading(false);
+        return; // impede redirecionamento imediato
+      } else {
+        // Para outros fluxos (produção/perda), redireciona direto
+        setLocation("/colaborador/painel");
+      }
     } catch (err: any) {
       setError(err.message || "Erro ao gravar o lançamento.");
     } finally {
@@ -325,9 +378,123 @@ export default function Lancamentos() {
           </div>
         )}
 
-        {/* ==========================================
-           WIZARD FLOW: PRODUÇÃO E PERDA
-           ========================================== */}
+        {showReceipt && receiptData ? (
+          <div className="flex-1 flex flex-col justify-between bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-brand-success/10 rounded-full flex items-center justify-center border border-brand-success/20 text-brand-success mx-auto mb-3">
+                <CheckCircle className="w-6 h-6" />
+              </div>
+              <h2 className="text-base font-extrabold text-ink-primary text-center">Lançamento Confirmado!</h2>
+              <p className="text-xs text-ink-secondary mt-1 text-center">O romaneio de saída foi gerado com sucesso.</p>
+
+              {/* Formato de recibo estilo cupons */}
+              <div className="bg-bg-glacial border border-[rgba(91,112,120,0.15)] rounded-glacial p-4 text-left font-mono text-[11px] mt-4 space-y-2 select-text">
+                <div className="text-center border-b border-dashed border-[rgba(91,112,120,0.2)] pb-2 mb-2">
+                  <span className="font-bold text-ink-primary tracking-wider text-xs block">065 GELO</span>
+                  <span className="text-[9px] text-ink-secondary block">COMPROVANTE DE CARREGAMENTO</span>
+                </div>
+                
+                <div><strong>Operação:</strong> {receiptData.tipo}</div>
+                <div><strong>Destinatário:</strong> {receiptData.destinatario}</div>
+                <div><strong>Motorista:</strong> {receiptData.motorista}</div>
+                <div><strong>Veículo:</strong> {receiptData.veiculo}</div>
+                <div><strong>Câmara:</strong> {camaraNome}</div>
+                <div><strong>Operador:</strong> {receiptData.colaboradorNome}</div>
+                <div><strong>Data:</strong> {receiptData.dataHora}</div>
+
+                <div className="border-t border-b border-dashed border-[rgba(91,112,120,0.2)] py-2 my-2">
+                  <div className="font-bold text-[9px] uppercase text-ink-secondary mb-1">Itens Carregados:</div>
+                  <div className="whitespace-pre-line text-ink-primary leading-relaxed">{receiptData.itensText}</div>
+                </div>
+
+                {receiptData.totalPeso > 0 && (
+                  <div className="text-right font-bold text-brand-primary">
+                    Total Peso: {receiptData.totalPeso} kg
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-6">
+              {/* Compartilhar WhatsApp do Cliente */}
+              {receiptData.whatsapp && (
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(
+                      `*🧾 COMPROVANTE DE CARREGAMENTO - 065 GELO*\n` +
+                      `----------------------------------------\n` +
+                      `*Operação:* ${receiptData.tipo}\n` +
+                      `*Destinatário:* ${receiptData.destinatario}\n` +
+                      `*Motorista:* ${receiptData.motorista}\n` +
+                      `*Veículo:* ${receiptData.veiculo}\n` +
+                      `*Câmara:* ${camaraNome}\n` +
+                      `*Operador:* ${receiptData.colaboradorNome}\n` +
+                      `*Data/Hora:* ${receiptData.dataHora}\n\n` +
+                      `*Itens Carregados:*\n${receiptData.itensText}\n\n` +
+                      (receiptData.totalPeso > 0 ? `*Total Peso:* ${receiptData.totalPeso} kg\n` : "") +
+                      `----------------------------------------\n` +
+                      `Estoque 065 - Registro de Expedição`
+                    );
+                    const phone = (receiptData.whatsapp || "").replace(/\D/g, "");
+                    const link = `https://api.whatsapp.com/send?phone=${phone.startsWith("55") ? phone : "55" + phone}&text=${text}`;
+                    window.open(link, "_blank");
+                  }}
+                  className="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-3 px-6 rounded-glacial active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-2"
+                >
+                  <span>💬</span>
+                  <span>Enviar para o Cliente</span>
+                </button>
+              )}
+
+              {/* Compartilhar Geral */}
+              <button
+                onClick={() => {
+                  const text = (
+                    `*🧾 COMPROVANTE DE CARREGAMENTO - 065 GELO*\n` +
+                    `----------------------------------------\n` +
+                    `*Operação:* ${receiptData.tipo}\n` +
+                    `*Destinatário:* ${receiptData.destinatario}\n` +
+                    `*Motorista:* ${receiptData.motorista}\n` +
+                    `*Veículo:* ${receiptData.veiculo}\n` +
+                    `*Câmara:* ${camaraNome}\n` +
+                    `*Operador:* ${receiptData.colaboradorNome}\n` +
+                    `*Data/Hora:* ${receiptData.dataHora}\n\n` +
+                    `*Itens Carregados:*\n${receiptData.itensText}\n\n` +
+                    (receiptData.totalPeso > 0 ? `*Total Peso:* ${receiptData.totalPeso} kg\n` : "") +
+                    `----------------------------------------\n` +
+                    `Estoque 065 - Registro de Expedição`
+                  );
+
+                  if (navigator.share) {
+                    navigator.share({
+                      title: "Comprovante 065 Gelo",
+                      text: text
+                    }).catch(() => {});
+                  } else {
+                    navigator.clipboard.writeText(text);
+                    alert("Comprovante copiado para a área de transferência!");
+                  }
+                }}
+                className="w-full bg-brand-primary text-white font-bold py-3 px-6 rounded-glacial active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-2"
+              >
+                <span>🔗</span>
+                <span>Compartilhar Comprovante</span>
+              </button>
+
+              {/* Voltar ao Painel */}
+              <button
+                onClick={() => setLocation("/colaborador/painel")}
+                className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.1)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer min-h-[48px]"
+              >
+                Voltar ao Painel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* ==========================================
+               WIZARD FLOW: PRODUÇÃO E PERDA
+               ========================================== */}
         {(flow === "producao" || flow === "perda") && (
           <div className="flex-1 flex flex-col justify-between bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6">
             
@@ -1147,6 +1314,8 @@ export default function Lancamentos() {
             )}
 
           </div>
+        )}
+          </>
         )}
 
       </div>
