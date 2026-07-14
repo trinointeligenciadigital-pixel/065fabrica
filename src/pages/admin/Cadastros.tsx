@@ -447,8 +447,6 @@ export default function Cadastros() {
   };
 
   const handleSendColaboradorCredentials = (colab: Doc<"colaboradores">) => {
-    if (!colab.whatsapp) return;
-
     // Obter as câmaras autorizadas com nome e link
     const camarasAutorizadasText = colab.camaras_autorizadas
       .map((cid) => {
@@ -460,7 +458,7 @@ export default function Cadastros() {
       .filter(Boolean)
       .join("\n");
 
-    const message = encodeURIComponent(
+    const messageText = 
       `*🧊 DADOS DE ACESSO - 065 GELO*\n` +
       `----------------------------------------\n` +
       `Olá, *${colab.nome}*!\n\n` +
@@ -468,12 +466,18 @@ export default function Cadastros() {
       `${camarasAutorizadasText || "_Nenhuma câmara vinculada ainda._"}\n\n` +
       `*Seu PIN de Acesso:* Utilize o PIN de 4 dígitos configurado pelo administrador.\n` +
       `----------------------------------------\n` +
-      `Estoque 065 - Registro de Expedição`
-    );
+      `Estoque 065 - Registro de Expedição`;
 
-    const phone = colab.whatsapp.replace(/\D/g, "");
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=55${phone}&text=${message}`;
-    window.open(whatsappUrl, "_blank");
+    if (colab.whatsapp) {
+      const message = encodeURIComponent(messageText);
+      const phone = colab.whatsapp.replace(/\D/g, "");
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=55${phone}&text=${message}`;
+      window.open(whatsappUrl, "_blank");
+    } else {
+      // Copiar para a área de transferência caso não possua WhatsApp
+      navigator.clipboard.writeText(messageText);
+      alert(`O colaborador ${colab.nome} não possui WhatsApp cadastrado.\n\nOs dados de acesso foram copiados para a sua área de transferência para você colar onde desejar!`);
+    }
   };
 
   // Render Table content dynamically
@@ -806,15 +810,13 @@ export default function Cadastros() {
                   </td>
                   <td className="py-3 px-4">{renderStatusBadge(colab.ativo)}</td>
                   <td className="py-3 px-4 text-right space-x-3">
-                    {colab.whatsapp && (
-                      <button
-                        onClick={() => handleSendColaboradorCredentials(colab)}
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-glacial hover:bg-[rgba(91,112,120,0.08)] text-emerald-600 hover:text-emerald-700 transition-all cursor-pointer align-middle"
-                        title="Enviar Dados de Acesso via WhatsApp"
-                      >
-                        <Share2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
+                    <button
+                      onClick={() => handleSendColaboradorCredentials(colab)}
+                      className="inline-flex items-center justify-center w-8 h-8 rounded-glacial hover:bg-[rgba(91,112,120,0.08)] text-emerald-600 hover:text-emerald-700 transition-all cursor-pointer align-middle"
+                      title="Compartilhar Dados de Acesso"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
                     <button
                       onClick={() => handleEditColaborador(colab)}
                       className="inline-flex items-center justify-center w-8 h-8 rounded-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-secondary hover:text-ink-primary transition-all cursor-pointer align-middle"
