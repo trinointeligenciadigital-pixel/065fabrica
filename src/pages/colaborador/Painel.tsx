@@ -19,6 +19,21 @@ export default function Painel() {
     token && camaraId ? { token, camaraId } : "skip"
   );
 
+  // Queries para estoque e câmara
+  const produtos = useQuery(api.cadastros.listarProdutosAtivos);
+  const sabores = useQuery(api.cadastros.listarSaboresAtivos);
+  const formatos = useQuery(api.cadastros.listarFormatosPacoteAtivos);
+  const camaraDetalhes = useQuery(api.cadastros.obterCamara, camaraId ? { id: camaraId } : "skip");
+  const saldosCamara = useQuery(api.estoque.obterSaldosCamara, camaraId ? { camaraId } : "skip");
+
+  // Filtrar produtos da câmara ativa
+  const produtosFiltrados = produtos?.filter((prod) => {
+    if (!camaraDetalhes?.produtos_ids || camaraDetalhes.produtos_ids.length === 0) {
+      return true;
+    }
+    return camaraDetalhes.produtos_ids.includes(prod._id);
+  });
+
   const [tempoRestante, setTempoRestante] = useState("");
 
   // Efeito para validar e redirecionar se a sessão for inválida
@@ -179,6 +194,75 @@ export default function Painel() {
           )}
 
         </main>
+
+        {/* Estoque da Câmara */}
+        <section className="mt-8 bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 text-left">
+          <h3 className="text-xs font-bold text-ink-primary uppercase tracking-wider mb-4 flex items-center space-x-1.5 border-b border-[rgba(91,112,120,0.08)] pb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-primary"></span>
+            <span>Estoque Disponível nesta Câmara</span>
+          </h3>
+          <div className="space-y-4">
+            {produtosFiltrados && produtosFiltrados.length > 0 ? (
+              produtosFiltrados.map((prod) => {
+                const isSaborizado = prod.nome.toLowerCase().includes("saborizado");
+                const isPacote = prod.unidade === "pacote" && !isSaborizado;
+
+                if (isSaborizado) {
+                  return (
+                    <div key={prod._id} className="space-y-1.5">
+                      <span className="text-xs font-bold text-ink-primary block">{prod.nome}</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {sabores?.map((sab) => {
+                          const key = `${prod._id}_${sab._id}`;
+                          const qtd = saldosCamara?.[key] ?? 0;
+                          return (
+                            <div key={sab._id} className="bg-bg-glacial/50 px-2.5 py-1.5 rounded flex justify-between items-center text-[11px] border border-[rgba(91,112,120,0.05)]">
+                              <span className="text-ink-secondary truncate pr-1">{sab.nome}</span>
+                              <span className="font-mono font-bold text-brand-primary">{qtd}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                } else if (isPacote) {
+                  return (
+                    <div key={prod._id} className="space-y-1.5">
+                      <span className="text-xs font-bold text-ink-primary block">{prod.nome}</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {formatos?.map((form) => {
+                          const key = `${prod._id}_${form._id}`;
+                          const qtd = saldosCamara?.[key] ?? 0;
+                          return (
+                            <div key={form._id} className="bg-bg-glacial/50 px-2.5 py-1.5 rounded flex justify-between items-center text-[11px] border border-[rgba(91,112,120,0.05)]">
+                              <span className="text-ink-secondary truncate pr-1">{form.nome}</span>
+                              <span className="font-mono font-bold text-brand-primary">{qtd}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                } else {
+                  const key = `${prod._id}`;
+                  const qtd = saldosCamara?.[key] ?? 0;
+                  return (
+                    <div key={prod._id} className="flex justify-between items-center text-xs py-1 border-b border-[rgba(91,112,120,0.05)] last:border-b-0">
+                      <span className="font-bold text-ink-primary">{prod.nome}</span>
+                      <span className="font-mono font-bold text-brand-primary bg-bg-glacial px-2.5 py-1 rounded border border-[rgba(91,112,120,0.05)]">
+                        {qtd} {prod.unidade}s
+                      </span>
+                    </div>
+                  );
+                }
+              })
+            ) : (
+              <p className="text-xs italic text-ink-secondary text-center py-2">
+                Nenhum produto vinculado a esta câmara.
+              </p>
+            )}
+          </div>
+        </section>
 
         {/* Botão de Finalizar Turno */}
         <div className="mt-8 text-center">
