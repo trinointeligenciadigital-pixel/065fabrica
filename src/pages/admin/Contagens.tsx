@@ -369,7 +369,7 @@ export default function Contagens() {
     <div className="animate-fade-in">
       {/* Title */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-ink-primary tracking-tight">Contagem Física</h2>
+        <h2 className="text-2xl font-bold text-ink-primary tracking-tight">Inventário</h2>
         <p className="text-sm text-ink-secondary">Audite e equalize o saldo de estoque físico com o sistema da fábrica.</p>
       </div>
 

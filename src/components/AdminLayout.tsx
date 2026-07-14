@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     { href: "/admin/dashboard", label: "Visão Geral", icon: <LayoutDashboard className="w-4 h-4 shrink-0" /> },
     { href: "/admin/cadastros", label: "Cadastros", icon: <ClipboardList className="w-4 h-4 shrink-0" /> },
     { href: "/admin/movimentacoes", label: "Movimentações", icon: <History className="w-4 h-4 shrink-0" /> },
-    { href: "/admin/contagens", label: "Contagem Física", icon: <Calculator className="w-4 h-4 shrink-0" /> },
+    { href: "/admin/contagens", label: "Inventário", icon: <Calculator className="w-4 h-4 shrink-0" /> },
     { href: "/admin/carregamentos", label: "Carregamentos", icon: <Truck className="w-4 h-4 shrink-0" /> },
   ];
 
