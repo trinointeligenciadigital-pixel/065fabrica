@@ -58,6 +58,18 @@ export default function Lancamentos() {
   const clientes = useQuery(api.cadastros.listarClientesAtivos);
   const saldosCamara = useQuery(api.estoque.obterSaldosCamara, camaraId ? { camaraId } : "skip");
 
+  const formatosFiltrados = formatos?.filter((form) => {
+    const camNomeLower = camaraNome.toLowerCase();
+    const camSlugLower = camaraSlug.toLowerCase();
+    const formNomeLower = form.nome.toLowerCase();
+
+    if (camNomeLower.includes("saborizado") || camSlugLower.includes("saborizado")) {
+      return formNomeLower.includes("30") || formNomeLower.includes("unidade") || formNomeLower.includes("unidades");
+    } else {
+      return !formNomeLower.includes("30") && !formNomeLower.includes("unidade");
+    }
+  });
+
   // Helpers para obter saldos em lote
   const getProductTotalSaldo = (prodId: string) => {
     if (!saldosCamara) return 0;
@@ -654,7 +666,7 @@ export default function Lancamentos() {
                 {/* Lista de Formatos */}
                 {produtoPrecisaFormato(selectedProduto) && (
                   <div className="space-y-2 flex-1 overflow-y-auto max-h-[350px] pr-1">
-                    {formatos?.map((form) => {
+                    {formatosFiltrados?.map((form) => {
                       const saldo = getFormatoSaldo(selectedProduto._id, form._id);
                       return (
                         <button
@@ -1235,7 +1247,7 @@ export default function Lancamentos() {
 
                         {produtoPrecisaFormato(selectedProduto) && (
                           <div className="space-y-2 flex-1 overflow-y-auto max-h-[260px] pr-1">
-                            {formatos?.map((form) => {
+                            {formatosFiltrados?.map((form) => {
                               const saldo = getFormatoSaldo(selectedProduto._id, form._id);
                               return (
                                 <button
