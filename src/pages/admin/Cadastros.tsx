@@ -22,7 +22,8 @@ import {
   ShieldCheck,
   Building,
   Upload,
-  Loader2
+  Loader2,
+  Share2
 } from "lucide-react";
 
 type TabKey = "produtos" | "sabores" | "formatos" | "camaras" | "colaboradores" | "veiculos" | "clientes" | "perdas" | "administradores" | "empresa";
@@ -445,6 +446,36 @@ export default function Cadastros() {
     }
   };
 
+  const handleSendColaboradorCredentials = (colab: Doc<"colaboradores">) => {
+    if (!colab.whatsapp) return;
+
+    // Obter as câmaras autorizadas com nome e link
+    const camarasAutorizadasText = colab.camaras_autorizadas
+      .map((cid) => {
+        const cam = camaras?.find((c) => c._id === cid);
+        if (!cam) return null;
+        const link = `${window.location.origin}/colaborador/login?camara=${cam.slug}`;
+        return `- *${cam.nome}*:\n  ${link}`;
+      })
+      .filter(Boolean)
+      .join("\n");
+
+    const message = encodeURIComponent(
+      `*🧊 DADOS DE ACESSO - 065 GELO*\n` +
+      `----------------------------------------\n` +
+      `Olá, *${colab.nome}*!\n\n` +
+      `Seguem os seus links de acesso ao sistema de estoque da fábrica para as câmaras autorizadas:\n\n` +
+      `${camarasAutorizadasText || "_Nenhuma câmara vinculada ainda._"}\n\n` +
+      `*Seu PIN de Acesso:* Utilize o PIN de 4 dígitos configurado pelo administrador.\n` +
+      `----------------------------------------\n` +
+      `Estoque 065 - Registro de Expedição`
+    );
+
+    const phone = colab.whatsapp.replace(/\D/g, "");
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=55${phone}&text=${message}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   // Render Table content dynamically
   const renderTable = () => {
     const emptyState = (singularName: string) => (
@@ -775,6 +806,15 @@ export default function Cadastros() {
                   </td>
                   <td className="py-3 px-4">{renderStatusBadge(colab.ativo)}</td>
                   <td className="py-3 px-4 text-right space-x-3">
+                    {colab.whatsapp && (
+                      <button
+                        onClick={() => handleSendColaboradorCredentials(colab)}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-glacial hover:bg-[rgba(91,112,120,0.08)] text-emerald-600 hover:text-emerald-700 transition-all cursor-pointer align-middle"
+                        title="Enviar Dados de Acesso via WhatsApp"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                     <button
                       onClick={() => handleEditColaborador(colab)}
                       className="inline-flex items-center justify-center w-8 h-8 rounded-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-secondary hover:text-ink-primary transition-all cursor-pointer align-middle"

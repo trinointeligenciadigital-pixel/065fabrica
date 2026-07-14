@@ -171,9 +171,14 @@ export default function Lancamentos() {
   const handleBack = () => {
     setError(null);
     if (flow === "producao" || flow === "perda") {
+      if (step === 1) {
+        setLocation("/colaborador/painel");
+        return;
+      }
       if (step === 2) {
         setStep(1);
         setSelectedProduto(null);
+        setQuantidadeStr("");
       } else if (step === 3) {
         if (produtoPrecisaSabor(selectedProduto!) || produtoPrecisaFormato(selectedProduto!)) {
           setStep(2);
@@ -183,6 +188,7 @@ export default function Lancamentos() {
         }
         setSelectedSabor(null);
         setSelectedFormato(null);
+        setQuantidadeStr("");
       } else if (step === 4) {
         if (flow === "perda") {
           setStep(3); // volta pro motivo
@@ -199,11 +205,13 @@ export default function Lancamentos() {
         if (subStep === 1) {
           setSubStep(0);
           setSelectedProduto(null);
+          setQuantidadeStr("");
         } else if (subStep === 2) {
           setSubStep(1);
           setSelectedProduto(null);
           setSelectedSabor(null);
           setSelectedFormato(null);
+          setQuantidadeStr("");
         } else if (subStep === 3) {
           if (produtoPrecisaSabor(selectedProduto!) || produtoPrecisaFormato(selectedProduto!)) {
             setSubStep(2);
@@ -214,8 +222,11 @@ export default function Lancamentos() {
           setQuantidadeStr("");
         }
       } else {
+        if (step === 1) {
+          setLocation("/colaborador/painel");
+          return;
+        }
         if (step > 1) setStep(step - 1);
-        else setLocation("/colaborador/painel");
       }
     }
   };

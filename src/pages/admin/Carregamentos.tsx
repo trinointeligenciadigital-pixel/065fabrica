@@ -492,7 +492,7 @@ export default function Carregamentos() {
         <p className="text-sm text-ink-secondary">Monitore vendas, patrocínios de eventos, controle devoluções e descarte de estoque.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <button
           onClick={() => {
             setNewTipo("venda");
@@ -527,24 +527,6 @@ export default function Carregamentos() {
           <div>
             <h3 className="text-sm font-bold text-ink-primary">Registrar Patrocínio</h3>
             <p className="text-[10px] text-ink-secondary mt-0.5">Carga pendente de devolução.</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => {
-            setNewTipo("patrocinio");
-            setNewEvento("");
-            setNewItens([{ produtoId: "", saborId: "", formatoPacoteId: "", quantidade: 1 }]);
-            setShowAddModal(true);
-          }}
-          className="glass-card interactive-card rounded-glacial p-4 text-left flex items-center space-x-4 cursor-pointer hover:border-indigo-500/30 group"
-        >
-          <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100 group-hover:scale-110 transition-transform">
-            <Calendar className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-ink-primary">Registrar Evento</h3>
-            <p className="text-[10px] text-ink-secondary mt-0.5">Expedição promocional/comodato.</p>
           </div>
         </button>
 
