@@ -1071,7 +1071,7 @@ export default function Carregamentos() {
               <div>
                 <h3 className="text-base font-bold text-ink-primary flex items-center space-x-2">
                   <Truck className="w-5 h-5 text-brand-primary" />
-                  <span>Novo Carregamento</span>
+                  <span>Novo Carregamento: {newTipo === "venda" ? "Venda" : "Patrocínio / Evento"}</span>
                 </h3>
                 <p className="text-xs text-ink-secondary mt-0.5">
                   Preencha as informações para baixar o estoque e registrar o despacho.
@@ -1099,7 +1099,7 @@ export default function Carregamentos() {
               {/* Form Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Câmara de Origem */}
-                <div>
+                <div className={newTipo === "patrocinio" ? "sm:col-span-2" : ""}>
                   <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Câmara Fria de Origem</label>
                   <select
                     value={newCamaraId}
@@ -1112,22 +1112,6 @@ export default function Carregamentos() {
                         {c.nome}
                       </option>
                     ))}
-                  </select>
-                </div>
-
-                {/* Tipo de Carga */}
-                <div>
-                  <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Tipo de Carga</label>
-                  <select
-                    value={newTipo}
-                    onChange={(e) => {
-                      setNewTipo(e.target.value as "venda" | "patrocinio");
-                      if (e.target.value === "venda") setNewEvento("");
-                    }}
-                    className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
-                  >
-                    <option value="venda">Venda Comercial</option>
-                    <option value="patrocinio">Patrocínio / Evento</option>
                   </select>
                 </div>
 
