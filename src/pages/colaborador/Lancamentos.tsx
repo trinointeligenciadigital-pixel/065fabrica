@@ -167,6 +167,29 @@ export default function Lancamentos() {
     setQuantidadeStr("");
   };
 
+  const handleResetFlow = () => {
+    setStep(1);
+    setSubStep(0);
+    setError(null);
+    setSelectedProduto(null);
+    setSelectedSabor(null);
+    setSelectedFormato(null);
+    setSelectedMotivo(null);
+    setQuantidadeStr("");
+    setObservacao("");
+    setEvento("");
+    setMotorista("");
+    setVeiculoTipo("proprio");
+    setSelectedVeiculo(null);
+    setTerceiroPlaca("");
+    setTerceiroDescricao("");
+    setItensCarregamento([]);
+    setSelectedClienteId("");
+    setClienteNomeAvulso("");
+    setShowReceipt(false);
+    setReceiptData(null);
+  };
+
   // Navegação para trás
   const handleBack = () => {
     setError(null);
@@ -361,8 +384,34 @@ export default function Lancamentos() {
         setLoading(false);
         return; // impede redirecionamento imediato
       } else {
-        // Para outros fluxos (produção/perda), redireciona direto
-        setLocation("/colaborador/painel");
+        // Para outros fluxos (produção/perda), monta dados de confirmação
+        const dataHoraStr = new Date().toLocaleString("pt-BR");
+        const colabNome = sessaoValidada?.colaborador?.nome || "Operador";
+        
+        let extraInfo = "";
+        let pesoVal = 0;
+        if (selectedSabor) {
+          extraInfo += ` (${selectedSabor.nome})`;
+        }
+        if (selectedFormato) {
+          extraInfo += ` (${selectedFormato.nome})`;
+          pesoVal = quantidadeVal * selectedFormato.peso_kg;
+        }
+
+        setReceiptData({
+          tipo: flow === "producao" ? "Entrada de Produção" : `Perda / Descarte (${selectedMotivo?.descricao || "Sem motivo"})`,
+          destinatario: camaraNome, // de onde/para onde
+          motorista: "—",
+          veiculo: "—",
+          itensText: `- ${quantidadeVal} ${selectedProduto!.unidade}s de ${selectedProduto!.nome}${extraInfo}`,
+          totalPeso: pesoVal,
+          dataHora: dataHoraStr,
+          colaboradorNome: colabNome
+        });
+
+        setShowReceipt(true);
+        setLoading(false);
+        return;
       }
     } catch (err: any) {
       setError(err.message || "Erro ao gravar o lançamento.");
@@ -509,12 +558,21 @@ export default function Lancamentos() {
                 <span>Compartilhar Comprovante</span>
               </button>
 
+              {/* Registrar Novo Lançamento */}
+              <button
+                onClick={handleResetFlow}
+                className="w-full bg-brand-primary hover:bg-opacity-90 text-white font-bold py-3.5 px-6 rounded-glacial active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-2 shadow-sm"
+              >
+                <span>➕</span>
+                <span>Registrar Novo Lançamento</span>
+              </button>
+
               {/* Voltar ao Painel */}
               <button
                 onClick={() => setLocation("/colaborador/painel")}
                 className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.1)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer min-h-[48px]"
               >
-                Voltar ao Painel
+                Voltar ao Início
               </button>
             </div>
           </div>
