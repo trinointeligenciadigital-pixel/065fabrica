@@ -1351,9 +1351,9 @@ export default function Cadastros() {
           {/* Botão de Voltar */}
           <button
             onClick={() => setActiveTab(null)}
-            className="flex items-center space-x-1.5 text-xs font-bold text-brand-primary hover:underline cursor-pointer mb-6"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-ink-primary bg-white hover:bg-bg-glacial py-2 px-4 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer shadow-sm mb-6"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3.5 h-3.5 text-ink-secondary" />
             <span>Voltar para Central de Cadastros</span>
           </button>
 
