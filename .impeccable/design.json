@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-14T12:25:00Z",
+  "title": "Design System: Estoque 065",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Azul Glacial",
+        "canonical": "#0E7C9C",
+        "tonalRamp": ["#03222b", "#064656", "#0a6a82", "#0e7c9c", "#21a6c9", "#58c8e6", "#9fe1f2", "#e8f7fa"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Fundo Glacial",
+        "canonical": "#EEF3F4",
+        "tonalRamp": ["#1b2123", "#3a464a", "#5b7078", "#889ba2", "#b3c1c6", "#d4dee0", "#eef3f4", "#f7fafb"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display Heading",
+        "purpose": "Grandes títulos da central de cadastros e do dashboard."
+      },
+      "body": {
+        "displayName": "Body Text",
+        "purpose": "Textos descritivos e informativos."
+      },
+      "label": {
+        "displayName": "Label Mono",
+        "purpose": "Códigos de câmara, placas e saldos numéricos tabular-nums."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-glacial",
+        "value": "0 2px 8px rgba(18, 38, 44, 0.04)",
+        "purpose": "Sombra sutil para destacar cards da superfície glacial."
+      }
+    ],
+    "motion": [
+      {
+        "name": "fade-in",
+        "value": "fade-in 0.15s ease-out",
+        "purpose": "Transição suave de aparecimento de modais e telas."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão Primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botão de ação principal no mobile e no admin.",
+      "html": "<button class=\"ds-btn-primary\">CONFIRMAR QUANTIDADE</button>",
+      "css": ".ds-btn-primary { background: #0E7C9C; color: #FFFFFF; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 14px 24px; cursor: pointer; transition: all 0.2s; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Card de Produto",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Card para agrupar informações de produtos ou sabores.",
+      "html": "<div class=\"ds-card\"><h4>Gelo Saborizado</h4><p>Saldo: 140 pacotes</p></div>",
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(91, 112, 120, 0.15); border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(18, 38, 44, 0.04); font-family: 'Inter', sans-serif; } .ds-card h4 { margin: 0 0 8px 0; color: #12262C; font-size: 14px; font-weight: 700; } .ds-card p { margin: 0; color: #5B7078; font-size: 12px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Glacial Operacional",
+    "overview": "O sistema de design do Estoque 065 é projetado expressamente para fins industriais e operacionais. Ele resolve a interface sob condições severas de uso prático: operadores de fábrica no celular (com luvas, mãos úmidas ou sob reflexo direto de luz) e gerentes em desktops.",
+    "keyCharacteristics": [
+      "Foco em usabilidade móvel com keypad virtual otimizado para dedos.",
+      "Cores frias de alto contraste inspiradas em gelo, aço e expedição.",
+      "Feedback de confirmação tátil/visual imediato (comprovante estilo romaneio).",
+      "Densidade visual equilibrada (limpa no mobile e bem aproveitada no desktop)."
+    ],
+    "rules": [
+      {
+        "name": "The Contrast Rule",
+        "body": "Todo texto principal ou botão de ação deve manter contraste superior a 4.5:1 contra a sua cor de superfície de fundo. Cores pastéis fracas são expressamente proibidas para rótulos de leitura.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Todas as quantidades numéricas de estoque, pesos, placas de veículos e horários devem utilizar a classe .tabular-nums com a fonte monoespaçada para garantir perfeito alinhamento de colunas em tabelas de auditoria.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Cards e superfícies permanecem planos sob repouso, utilizando bordas de 1px (rgba(91, 112, 120, 0.15)) para demarcação. Sombras e transições de elevação ocorrem apenas como resposta a hover do cursor ou clique físico do operador.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do Manter botões de ação com altura mínima de 48px em todas as telas acessadas por celulares para facilitar o clique dos operadores.",
+      "Do Utilizar números monoespaçados (.tabular-nums) para todo dado numérico de estoque ou de pesagem.",
+      "Do Garantir contraste de no mínimo 4.5:1 nas cores de texto contra o fundo do card ou tela."
+    ],
+    "donts": [
+      "Don't Utilizar bordas laterais coloridas maiores que 1px (side-stripes) como detalhes decorativos em alertas ou cards.",
+      "Don't Utilizar gradientes de texto ou efeitos de glassmorphism em massa fora das marcações específicas pré-definidas.",
+      "Don't Espremer tabelas densas do desktop no celular dos operadores (use listas ou wizards passo a passo).",
+      "Don't Utilizar cantos arredondados excessivamente grandes (acima de 12px) em cards ou contêineres principais."
+    ]
+  }
+}

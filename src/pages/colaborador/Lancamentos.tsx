@@ -445,17 +445,17 @@ export default function Lancamentos() {
       <div className="w-full max-w-md mx-auto flex-1 flex flex-col justify-between">
         
         {/* Top bar de navegação / Status */}
-        <div className="flex items-center justify-between mb-6 bg-surface-card px-4 py-3.5 rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial">
+        <div className="flex items-center justify-between mb-6 bg-surface-card px-4 py-3 rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial">
           <button
             onClick={handleBack}
-            className="text-xs text-brand-primary font-bold hover:underline cursor-pointer flex items-center space-x-1.5 min-h-[44px]"
+            className="text-xs text-brand-primary font-bold px-3 py-1.5 bg-bg-glacial hover:bg-[rgba(14,124,156,0.1)] active:scale-[0.98] rounded-glacial border border-[rgba(91,112,120,0.1)] cursor-pointer flex items-center space-x-1.5 min-h-[38px]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Voltar</span>
           </button>
           
           <div className="text-right">
-            <span className="text-[9px] text-ink-secondary block font-mono uppercase tracking-wider">CÂMARA ATIVA</span>
+            <span className="text-[11px] text-ink-secondary block font-mono uppercase tracking-wider">CÂMARA ATIVA</span>
             <span className="text-xs font-bold text-ink-primary block">{camaraNome}</span>
           </div>
         </div>
@@ -480,7 +480,7 @@ export default function Lancamentos() {
               <div className="bg-bg-glacial border border-[rgba(91,112,120,0.15)] rounded-glacial p-4 text-left font-mono text-[11px] mt-4 space-y-2 select-text">
                 <div className="text-center border-b border-dashed border-[rgba(91,112,120,0.2)] pb-2 mb-2">
                   <span className="font-bold text-ink-primary tracking-wider text-xs block">065 GELO</span>
-                  <span className="text-[9px] text-ink-secondary block">COMPROVANTE DE CARREGAMENTO</span>
+                  <span className="text-[11px] text-ink-secondary block">COMPROVANTE DE CARREGAMENTO</span>
                 </div>
                 
                 <div><strong>Operação:</strong> {receiptData.tipo}</div>
@@ -492,7 +492,7 @@ export default function Lancamentos() {
                 <div><strong>Data:</strong> {receiptData.dataHora}</div>
 
                 <div className="border-t border-b border-dashed border-[rgba(91,112,120,0.2)] py-2 my-2">
-                  <div className="font-bold text-[9px] uppercase text-ink-secondary mb-1">Itens Carregados:</div>
+                  <div className="font-bold text-[11px] uppercase text-ink-secondary mb-1">Itens Carregados:</div>
                   <div className="whitespace-pre-line text-ink-primary leading-relaxed">{receiptData.itensText}</div>
                 </div>
 
@@ -618,7 +618,7 @@ export default function Lancamentos() {
                       >
                         <div className="flex flex-col text-left">
                           <span>{prod.nome}</span>
-                          <span className="text-[10px] text-ink-secondary font-normal font-mono mt-0.5">
+                          <span className="text-[11px] text-ink-secondary font-normal font-mono mt-0.5">
                             Saldo: {saldosCamara !== undefined ? `${saldoTotal.toLocaleString("pt-BR")} ${prod.unidade}s` : "Carregando..."}
                           </span>
                         </div>
@@ -629,6 +629,13 @@ export default function Lancamentos() {
                     );
                   })}
                 </div>
+                <button
+                  onClick={handleBack}
+                  className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] mt-4 active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                >
+                  <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                  <span>Voltar ao Início</span>
+                </button>
               </div>
             )}
 
@@ -654,7 +661,7 @@ export default function Lancamentos() {
                           className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] hover:border-brand-primary active:bg-[rgba(14,124,156,0.05)] rounded-glacial px-4 py-4 text-sm font-bold text-ink-primary cursor-pointer min-h-[56px] flex items-center justify-between"
                         >
                           <span>{sab.nome}</span>
-                          <span className="text-[10px] font-semibold font-mono text-ink-secondary">
+                          <span className="text-[11px] font-semibold font-mono text-ink-secondary">
                             Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                           </span>
                         </button>
@@ -678,7 +685,7 @@ export default function Lancamentos() {
                           className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] hover:border-brand-primary active:bg-[rgba(14,124,156,0.05)] rounded-glacial px-4 py-4 text-sm font-bold text-ink-primary cursor-pointer min-h-[56px] flex items-center justify-between"
                         >
                           <span>⚖️ {form.nome} ({form.peso_kg} kg)</span>
-                          <span className="text-[10px] font-semibold font-mono text-ink-secondary">
+                          <span className="text-[11px] font-semibold font-mono text-ink-secondary">
                             Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                           </span>
                         </button>
@@ -686,6 +693,13 @@ export default function Lancamentos() {
                     })}
                   </div>
                 )}
+                <button
+                  onClick={handleBack}
+                  className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] mt-4 active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                >
+                  <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                  <span>Voltar ao Passo 1</span>
+                </button>
               </div>
             )}
 
@@ -700,11 +714,11 @@ export default function Lancamentos() {
                     <span className="font-semibold text-ink-primary block">
                       {selectedProduto.nome} {selectedSabor ? `(${selectedSabor.nome})` : ""} {selectedFormato ? `(${selectedFormato.nome})` : ""}
                     </span>
-                    <span className="text-[10px] text-ink-secondary">Unidade: {selectedProduto.unidade}</span>
+                    <span className="text-xs text-ink-secondary">Unidade: {selectedProduto.unidade}</span>
                   </div>
                   {flow === "perda" && (
                     <div className="text-right">
-                      <span className="text-ink-secondary block text-[9px] uppercase font-mono">Saldo Disponível</span>
+                      <span className="text-ink-secondary block text-[11px] uppercase font-mono">Saldo Disponível</span>
                       <span className="font-bold text-ink-primary font-mono text-sm tabular-nums">
                         {saldoDisponivel !== undefined ? `${saldoDisponivel} ${selectedProduto.unidade}s` : "Carregando..."}
                       </span>
@@ -713,8 +727,21 @@ export default function Lancamentos() {
                 </div>
 
                 {/* Display Quantidade */}
-                <div className="w-full h-14 bg-bg-glacial border-2 border-[rgba(91,112,120,0.2)] rounded-glacial flex items-center justify-center mb-6 font-mono text-xl font-bold text-ink-primary tabular-nums">
+                <div className="w-full h-14 bg-bg-glacial border-2 border-[rgba(91,112,120,0.2)] rounded-glacial flex items-center justify-center mb-4 font-mono text-xl font-bold text-ink-primary tabular-nums">
                   {quantidadeStr || "0"} <span className="ml-1 text-sm font-sans text-ink-secondary">{selectedProduto.unidade}s</span>
+                </div>
+
+                {/* Presets Rápidos */}
+                <div className="flex gap-2 w-full max-w-[280px] mb-4">
+                  {["10", "30", "50", "100"].map((preset) => (
+                    <button
+                      key={preset}
+                      onClick={() => setQuantidadeStr(preset)}
+                      className="flex-1 py-2 bg-white border border-brand-primary text-brand-primary hover:bg-[rgba(14,124,156,0.05)] active:scale-[0.98] rounded-glacial font-bold text-xs cursor-pointer select-none transition-all"
+                    >
+                      {preset}
+                    </button>
+                  ))}
                 </div>
 
                 {/* Keypad */}
@@ -748,26 +775,35 @@ export default function Lancamentos() {
                   </button>
                 </div>
 
-                {/* Avançar */}
-                <button
-                  onClick={() => {
-                    const q = parseFloat(quantidadeStr);
-                    if (isNaN(q) || q <= 0) {
-                      setError("Digite uma quantidade válida.");
-                      return;
-                    }
-                    if (flow === "perda" && saldoDisponivel !== undefined && saldoDisponivel < q) {
-                      setError(`Saldo insuficiente! Estoque disponível na câmara: ${saldoDisponivel}`);
-                      return;
-                    }
-                    setError(null);
-                    if (flow === "perda") setStep(4); // Vai para escolher motivo
-                    else setStep(4); // Vai direto para confirmação
-                  }}
-                  className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 transition-all cursor-pointer min-h-[56px]"
-                >
-                  Confirmar Quantidade
-                </button>
+                {/* Ações de Avançar e Voltar */}
+                <div className="w-full space-y-2">
+                  <button
+                    onClick={() => {
+                      const q = parseFloat(quantidadeStr);
+                      if (isNaN(q) || q <= 0) {
+                        setError("Digite uma quantidade válida.");
+                        return;
+                      }
+                      if (flow === "perda" && saldoDisponivel !== undefined && saldoDisponivel < q) {
+                        setError(`Saldo insuficiente! Estoque disponível na câmara: ${saldoDisponivel}`);
+                        return;
+                      }
+                      setError(null);
+                      if (flow === "perda") setStep(4);
+                      else setStep(4);
+                    }}
+                    className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center"
+                  >
+                    Confirmar Quantidade
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                  >
+                    <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                    <span>Voltar</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -805,19 +841,28 @@ export default function Lancamentos() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => {
-                    if (!selectedMotivo) {
-                      setError("Selecione o motivo da perda.");
-                      return;
-                    }
-                    setError(null);
-                    setStep(5); // Vai para confirmação
-                  }}
-                  className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 transition-all cursor-pointer min-h-[56px] mt-6"
-                >
-                  Avançar
-                </button>
+                <div className="w-full space-y-2 mt-6">
+                  <button
+                    onClick={() => {
+                      if (!selectedMotivo) {
+                        setError("Selecione o motivo da perda.");
+                        return;
+                      }
+                      setError(null);
+                      setStep(5);
+                    }}
+                    className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center"
+                  >
+                    Avançar
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                  >
+                    <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                    <span>Voltar</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -869,20 +914,29 @@ export default function Lancamentos() {
                   </div>
                 </div>
 
-                <button
-                  disabled={loading}
-                  onClick={handleGravar}
-                  className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[56px] flex items-center justify-center space-x-2"
-                >
-                  {loading ? (
-                    <span className="animate-pulse">Gravando movimentação...</span>
-                  ) : (
-                    <>
-                      <span>💾</span>
-                      <span>Gravar Lançamento</span>
-                    </>
-                  )}
-                </button>
+                <div className="w-full space-y-2">
+                  <button
+                    disabled={loading}
+                    onClick={handleGravar}
+                    className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center space-x-2"
+                  >
+                    {loading ? (
+                      <span className="animate-pulse">Gravando movimentação...</span>
+                    ) : (
+                      <>
+                        <span>💾</span>
+                        <span>Gravar Lançamento</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                  >
+                    <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                    <span>Voltar</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1076,41 +1130,50 @@ export default function Lancamentos() {
                   </div>
                 </div>
 
-                 <button
-                  onClick={() => {
-                    if (tipoCarregamento === "patrocinio" && !evento) {
-                      setError("Nome do evento é obrigatório.");
-                      return;
-                    }
-                    if (tipoCarregamento === "venda") {
-                      if (!selectedClienteId) {
-                        setError("Selecione um cliente ou defina um cliente avulso.");
+                <div className="w-full space-y-2 mt-6">
+                  <button
+                    onClick={() => {
+                      if (tipoCarregamento === "patrocinio" && !evento) {
+                        setError("Nome do evento é obrigatório.");
                         return;
                       }
-                      if (selectedClienteId === "avulso" && !clienteNomeAvulso.trim()) {
-                        setError("Informe o nome do cliente avulso.");
+                      if (tipoCarregamento === "venda") {
+                        if (!selectedClienteId) {
+                          setError("Selecione um cliente ou defina um cliente avulso.");
+                          return;
+                        }
+                        if (selectedClienteId === "avulso" && !clienteNomeAvulso.trim()) {
+                          setError("Informe o nome do cliente avulso.");
+                          return;
+                        }
+                      }
+                      if (!motorista) {
+                        setError("Nome do motorista é obrigatório.");
                         return;
                       }
-                    }
-                    if (!motorista) {
-                      setError("Nome do motorista é obrigatório.");
-                      return;
-                    }
-                    if (veiculoTipo === "proprio" && !selectedVeiculo) {
-                      setError("Selecione um veículo da frota.");
-                      return;
-                    }
-                    if (veiculoTipo === "terceiro" && (!terceiroPlaca || !terceiroDescricao)) {
-                      setError("Preencha a placa e a descrição do veículo terceiro.");
-                      return;
-                    }
-                    setError(null);
-                    setStep(2); // Avança para adicionar itens
-                  }}
-                  className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 transition-all cursor-pointer min-h-[56px] mt-6"
-                >
-                  Avançar para Itens
-                </button>
+                      if (veiculoTipo === "proprio" && !selectedVeiculo) {
+                        setError("Selecione um veículo da frota.");
+                        return;
+                      }
+                      if (veiculoTipo === "terceiro" && (!terceiroPlaca || !terceiroDescricao)) {
+                        setError("Preencha a placa e a descrição do veículo terceiro.");
+                        return;
+                      }
+                      setError(null);
+                      setStep(2); // Avança para adicionar itens
+                    }}
+                    className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center"
+                  >
+                    Avançar para Itens
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                  >
+                    <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                    <span>Voltar ao Início</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1134,46 +1197,55 @@ export default function Lancamentos() {
                           {itensCarregamento.map((item, index) => (
                             <div key={index} className="flex justify-between items-center bg-bg-glacial p-3 rounded-glacial border border-[rgba(91,112,120,0.1)] text-xs text-left">
                               <div>
-                                <span className="font-bold text-ink-primary block">
-                                  {item.produtoNome} {item.saborNome ? `(${item.saborNome})` : ""} {item.formatoNome ? `(${item.formatoNome})` : ""}
-                                </span>
-                                <span className="text-[10px] text-ink-secondary">Quantidade: {item.quantidade} {item.unidade}s</span>
+                                  <span className="font-bold text-ink-primary block">
+                                    {item.produtoNome} {item.saborNome ? `(${item.saborNome})` : ""} {item.formatoNome ? `(${item.formatoNome})` : ""}
+                                  </span>
+                                  <span className="text-xs text-ink-secondary">Quantidade: {item.quantidade} {item.unidade}s</span>
+                                </div>
+                                <button
+                                  onClick={() => handleRemoveCarregamentoItem(index)}
+                                  className="text-xs text-brand-error font-bold hover:underline cursor-pointer min-h-[36px] px-2"
+                                >
+                                  Excluir
+                                </button>
                               </div>
-                              <button
-                                onClick={() => handleRemoveCarregamentoItem(index)}
-                                className="text-xs text-brand-error font-bold hover:underline cursor-pointer min-h-[36px] px-2"
-                              >
-                                Excluir
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Botão de adicionar novo item */}
-                      <button
-                        onClick={() => setSubStep(1)}
-                        className="w-full py-3 bg-[rgba(14,124,156,0.05)] hover:bg-[rgba(14,124,156,0.1)] border border-dashed border-brand-primary text-brand-primary text-xs font-bold rounded-glacial cursor-pointer min-h-[48px] flex items-center justify-center space-x-1"
-                      >
-                        <span>➕</span>
-                        <span>Adicionar Item</span>
-                      </button>
-                    </div>
-
-                    {/* Botão Avançar para Confirmação */}
-                    <button
-                      onClick={() => {
-                        if (itensCarregamento.length === 0) {
-                          setError("Adicione pelo menos um item à carga.");
-                          return;
-                        }
-                        setError(null);
-                        setStep(3); // Vai para confirmação
-                      }}
-                      className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 transition-all cursor-pointer min-h-[56px] mt-6"
-                    >
-                      Avançar para Confirmação
-                    </button>
+                            ))}
+                          </div>
+                        )}
+  
+                        {/* Botão de adicionar novo item */}
+                        <button
+                          onClick={() => setSubStep(1)}
+                          className="w-full py-3 bg-[rgba(14,124,156,0.05)] hover:bg-[rgba(14,124,156,0.1)] border border-dashed border-brand-primary text-brand-primary text-xs font-bold rounded-glacial cursor-pointer min-h-[48px] flex items-center justify-center space-x-1"
+                        >
+                          <span>➕</span>
+                          <span>Adicionar Item</span>
+                        </button>
+                      </div>
+  
+                      {/* Botão Avançar para Confirmação */}
+                      <div className="w-full space-y-2 mt-6">
+                        <button
+                          onClick={() => {
+                            if (itensCarregamento.length === 0) {
+                              setError("Adicione pelo menos um item à carga.");
+                              return;
+                            }
+                            setError(null);
+                            setStep(3); // Vai para confirmação
+                          }}
+                          className="w-full bg-brand-primary text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center"
+                        >
+                          Avançar para Confirmação
+                        </button>
+                        <button
+                          onClick={handleBack}
+                          className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                        >
+                          <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                          <span>Voltar</span>
+                        </button>
+                      </div>
                   </div>
                 ) : (
                   /* SUB-FLOW: Adicionar Item */
@@ -1201,17 +1273,24 @@ export default function Lancamentos() {
                               >
                                 <div className="flex flex-col text-left">
                                   <span>{prod.nome}</span>
-                                  <span className="text-[9px] text-ink-secondary font-normal font-mono mt-0.5">
+                                  <span className="text-[11px] text-ink-secondary font-normal font-mono mt-0.5">
                                     Saldo: {saldosCamara !== undefined ? `${saldoTotal.toLocaleString("pt-BR")} ${prod.unidade}s` : "Carregando..."}
                                   </span>
                                 </div>
-                                <span className="text-[10px] px-2 py-0.5 rounded bg-white text-ink-secondary shrink-0 self-center">
+                                <span className="text-[11px] px-2 py-0.5 rounded bg-white text-ink-secondary shrink-0 self-center">
                                   {prod.unidade}
                                 </span>
                               </button>
                             );
                           })}
                         </div>
+                        <button
+                          onClick={handleBack}
+                          className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] mt-4 active:scale-[0.98] transition-all cursor-pointer min-h-[44px] flex items-center justify-center space-x-1.5 text-xs"
+                        >
+                          <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                          <span>Voltar para Itens</span>
+                        </button>
                       </div>
                     )}
 
@@ -1236,7 +1315,7 @@ export default function Lancamentos() {
                                   className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] rounded-glacial px-4 py-3.5 text-xs font-bold text-ink-primary cursor-pointer min-h-[48px] flex items-center justify-between"
                                 >
                                   <span>{sab.nome}</span>
-                                  <span className="text-[9px] font-semibold font-mono text-ink-secondary">
+                                  <span className="text-[11px] font-semibold font-mono text-ink-secondary">
                                     Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                                   </span>
                                 </button>
@@ -1259,7 +1338,7 @@ export default function Lancamentos() {
                                   className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] rounded-glacial px-4 py-3.5 text-xs font-bold text-ink-primary cursor-pointer min-h-[48px] flex items-center justify-between"
                                 >
                                   <span>⚖️ {form.nome} ({form.peso_kg} kg)</span>
-                                  <span className="text-[9px] font-semibold font-mono text-ink-secondary">
+                                  <span className="text-[11px] font-semibold font-mono text-ink-secondary">
                                     Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                                   </span>
                                 </button>
@@ -1267,6 +1346,13 @@ export default function Lancamentos() {
                             })}
                           </div>
                         )}
+                        <button
+                          onClick={handleBack}
+                          className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] mt-4 active:scale-[0.98] transition-all cursor-pointer min-h-[44px] flex items-center justify-center space-x-1.5 text-xs"
+                        >
+                          <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                          <span>Voltar para Produto</span>
+                        </button>
                       </div>
                     )}
 
@@ -1281,10 +1367,10 @@ export default function Lancamentos() {
                             <span className="font-semibold text-ink-primary block">
                               {selectedProduto.nome} {selectedSabor ? `(${selectedSabor.nome})` : ""} {selectedFormato ? `(${selectedFormato.nome})` : ""}
                             </span>
-                            <span className="text-[10px] text-ink-secondary">Unidade: {selectedProduto.unidade}</span>
+                            <span className="text-xs text-ink-secondary">Unidade: {selectedProduto.unidade}</span>
                           </div>
                           <div className="text-right">
-                            <span className="text-ink-secondary block text-[9px] uppercase font-mono">Disponível</span>
+                            <span className="text-ink-secondary block text-[11px] uppercase font-mono">Disponível</span>
                             <span className="font-bold text-ink-primary font-mono text-sm tabular-nums">
                               {saldoDisponivel !== undefined ? `${saldoDisponivel} ${selectedProduto.unidade}s` : "Carregando..."}
                             </span>
@@ -1294,6 +1380,19 @@ export default function Lancamentos() {
                         {/* Display Qtd */}
                         <div className="w-full h-12 bg-bg-glacial border-2 border-[rgba(91,112,120,0.2)] rounded-glacial flex items-center justify-center mb-4 font-mono text-lg font-bold text-ink-primary tabular-nums">
                           {quantidadeStr || "0"} <span className="ml-1 text-xs font-sans text-ink-secondary">{selectedProduto.unidade}s</span>
+                        </div>
+
+                        {/* Presets Rápidos */}
+                        <div className="flex gap-2 w-full max-w-[240px] mb-4">
+                          {["10", "30", "50", "100"].map((preset) => (
+                            <button
+                              key={preset}
+                              onClick={() => setQuantidadeStr(preset)}
+                              className="flex-1 py-1.5 bg-white border border-brand-primary text-brand-primary hover:bg-[rgba(14,124,156,0.05)] active:scale-[0.98] rounded-glacial font-bold text-xs cursor-pointer select-none transition-all"
+                            >
+                              {preset}
+                            </button>
+                          ))}
                         </div>
 
                         {/* Keypad */}
@@ -1309,7 +1408,7 @@ export default function Lancamentos() {
                           ))}
                           <button
                             onClick={handleKeypadClear}
-                            className="h-10 bg-bg-glacial border border-[rgba(91,112,120,0.15)] text-brand-error rounded-full text-[10px] font-bold cursor-pointer select-none"
+                            className="h-10 bg-bg-glacial border border-[rgba(91,112,120,0.15)] text-brand-error rounded-full text-xs font-bold cursor-pointer select-none"
                           >
                             LIMPAR
                           </button>
@@ -1327,13 +1426,22 @@ export default function Lancamentos() {
                           </button>
                         </div>
 
-                        {/* Botão para Confirmar e Inserir Item */}
-                        <button
-                          onClick={handleConfirmCarregamentoItem}
-                          className="w-full bg-brand-primary text-white font-bold py-3 px-6 rounded-glacial hover:bg-opacity-90 transition-all cursor-pointer min-h-[48px]"
-                        >
-                          Adicionar Item à Carga
-                        </button>
+                        {/* Ações de Confirmar e Voltar */}
+                        <div className="w-full space-y-2">
+                          <button
+                            onClick={handleConfirmCarregamentoItem}
+                            className="w-full bg-brand-primary text-white font-bold py-3 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center"
+                          >
+                            Adicionar Item à Carga
+                          </button>
+                          <button
+                            onClick={handleBack}
+                            className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-2.5 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[40px] flex items-center justify-center space-x-1.5 text-xs"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5 text-ink-secondary" />
+                            <span>Voltar</span>
+                          </button>
+                        </div>
                       </div>
                     )}
 
@@ -1398,20 +1506,29 @@ export default function Lancamentos() {
                   </div>
                 </div>
 
-                <button
-                  disabled={loading}
-                  onClick={handleGravar}
-                  className="w-full bg-brand-success text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[56px] flex items-center justify-center space-x-2"
-                >
-                  {loading ? (
-                    <span className="animate-pulse">Gravando carregamento...</span>
-                  ) : (
-                    <>
-                      <Truck className="w-5 h-5 mr-1" />
-                      <span>Gravar Carregamento</span>
-                    </>
-                  )}
-                </button>
+                <div className="w-full space-y-2">
+                  <button
+                    disabled={loading}
+                    onClick={handleGravar}
+                    className="w-full bg-brand-success text-white font-bold py-3.5 px-6 rounded-glacial hover:bg-opacity-90 active:scale-[0.98] transition-all cursor-pointer min-h-[50px] flex items-center justify-center space-x-2"
+                  >
+                    {loading ? (
+                      <span className="animate-pulse">Gravando carregamento...</span>
+                    ) : (
+                      <>
+                        <Truck className="w-5 h-5 mr-1" />
+                        <span>Gravar Carregamento</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleBack}
+                    className="w-full bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold py-3 px-6 rounded-glacial border border-[rgba(91,112,120,0.15)] active:scale-[0.98] transition-all cursor-pointer min-h-[48px] flex items-center justify-center space-x-1.5"
+                  >
+                    <ArrowLeft className="w-4 h-4 text-ink-secondary" />
+                    <span>Voltar</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1423,7 +1540,7 @@ export default function Lancamentos() {
       </div>
       
       {/* Footer */}
-      <footer className="text-center text-[10px] text-ink-secondary mt-8 font-mono">
+      <footer className="text-center text-xs text-ink-secondary mt-8 font-mono">
         Estoque 065 &copy; 2026 — Registro Seguro de Atividades
       </footer>
     </div>
