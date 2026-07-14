@@ -97,7 +97,8 @@ export default defineSchema({
       v.literal("patrocinio"),
       v.literal("perda"),
       v.literal("ajuste"),
-      v.literal("retorno_patrocinio")
+      v.literal("retorno_patrocinio"),
+      v.literal("retorno_venda")
     ),
     camara_id: v.id("camaras"),
     produto_id: v.id("produtos"),

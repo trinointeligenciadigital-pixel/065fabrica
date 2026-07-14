@@ -240,7 +240,7 @@ export const obterDetalhesCarregamento = query({
  * Mutation para registrar o retorno físico de itens de patrocínio.
  * Reinsere os itens devolvidos no estoque e atualiza o status para retorno_concluido.
  */
-export const registrarRetornoPatrocinio = mutation({
+export const registrarRetornoCarregamento = mutation({
   args: {
     id: v.id("carregamentos"),
     itens: v.array(
@@ -259,8 +259,14 @@ export const registrarRetornoPatrocinio = mutation({
     // 1. Obter e validar o carregamento
     const c = await ctx.db.get(args.id);
     if (!c) throw new Error("Carregamento não encontrado.");
-    if (c.tipo !== "patrocinio") throw new Error("Apenas patrocínios podem ter retornos registrados.");
-    if (c.status !== "retorno_pendente") throw new Error("Este patrocínio já tem devoluções registradas.");
+    
+    if (c.tipo === "patrocinio") {
+      if (c.status !== "retorno_pendente") throw new Error("Este patrocínio já tem devoluções/sobras registradas.");
+    } else if (c.tipo === "venda") {
+      if (c.status !== "concluido") throw new Error("Esta venda não está concluída ou já tem devoluções registradas.");
+    } else {
+      throw new Error("Tipo de carregamento inválido.");
+    }
 
     // 2. Carregar as saídas originais para obter a câmara e validar tetos de devolução
     const movimentacoes = await ctx.db
@@ -309,9 +315,9 @@ export const registrarRetornoPatrocinio = mutation({
           }
         }
 
-        // Inserir transação de entrada de retorno de patrocínio no estoque
+        // Inserir transação de entrada de retorno de patrocínio ou venda no estoque
         await ctx.db.insert("movimentacoes", {
-          tipo: "retorno_patrocinio",
+          tipo: c.tipo === "patrocinio" ? "retorno_patrocinio" : "retorno_venda",
           camara_id: camaraId,
           produto_id: rItem.produto_id,
           sabor_id: rItem.sabor_id || undefined,
@@ -341,3 +347,5 @@ export const registrarRetornoPatrocinio = mutation({
     return c._id;
   },
 });
+
+export const registrarRetornoPatrocinio = registrarRetornoCarregamento;

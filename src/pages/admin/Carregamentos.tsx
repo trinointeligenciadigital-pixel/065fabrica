@@ -25,7 +25,7 @@ import { exportToCSV } from "../../utils/export";
 
 export default function Carregamentos() {
   const carregamentos = useQuery(api.carregamentos.listarCarregamentos) as any[] | undefined;
-  const registrarRetorno = useMutation(api.carregamentos.registrarRetornoPatrocinio);
+  const registrarRetorno = useMutation(api.carregamentos.registrarRetornoCarregamento);
 
   // Queries para cadastros auxiliares do modal de Lançamento
   const camaras = useQuery(api.cadastros.listarCamarasAtivas);
@@ -433,7 +433,11 @@ export default function Carregamentos() {
 
       setShowReturnModal(false);
       setSelectedCarregamentoId(null);
-      alert("Retorno de patrocínio registrado com sucesso! O estoque foi reintegrado.");
+      alert(
+        activeCarregamento?.tipo === "venda"
+          ? "Devolução de venda registrada com sucesso! O estoque foi reintegrado."
+          : "Retorno de patrocínio registrado com sucesso! O estoque foi reintegrado."
+      );
     } catch (err: any) {
       setError(err.message || "Erro ao registrar retorno.");
     } finally {
@@ -453,7 +457,7 @@ export default function Carregamentos() {
   };
 
   // Status Badges
-  const renderStatusBadge = (status: string) => {
+  const renderStatusBadge = (status: string, tipo?: string) => {
     const configs: Record<string, { label: string; style: string }> = {
       concluido: {
         label: "Venda Concluída",
@@ -464,7 +468,7 @@ export default function Carregamentos() {
         style: "bg-amber-50 text-amber-800 border-amber-200"
       },
       retorno_concluido: {
-        label: "Retorno Liquidado",
+        label: tipo === "venda" ? "Venda com Devolução" : "Retorno Liquidado",
         style: "bg-indigo-50 text-indigo-700 border-indigo-200"
       }
     };
@@ -727,14 +731,14 @@ export default function Carregamentos() {
                           Descartado
                         </span>
                       ) : (
-                        renderStatusBadge(c.status)
+                        renderStatusBadge(c.status, c.tipo)
                       )}
                     </td>
 
                     {/* Ações */}
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end space-x-3">
-                        {c.status === "retorno_pendente" && (
+                        {(c.status === "retorno_pendente" || (c.status === "concluido" && c.tipo === "venda")) && (
                           <button
                             onClick={() => {
                               setSelectedCarregamentoId(c._id);
@@ -742,7 +746,7 @@ export default function Carregamentos() {
                             }}
                             className="text-xs text-amber-600 font-bold hover:underline cursor-pointer"
                           >
-                            Dar Baixa (Retorno)
+                            {c.tipo === "venda" ? "Registrar Devolução" : "Dar Baixa (Retorno)"}
                           </button>
                         )}
                         <button
@@ -945,7 +949,11 @@ export default function Carregamentos() {
               <div>
                 <h3 className="text-base font-bold text-ink-primary flex items-center space-x-2">
                   <TrendingDown className="w-5 h-5 text-amber-500" />
-                  <span>Baixa de Retorno: {activeCarregamento.evento || "Patrocínio"}</span>
+                  <span>
+                    {activeCarregamento.tipo === "venda"
+                      ? `Registrar Devolução de Venda: ${activeCarregamento.cliente_nome || "Avulso"}`
+                      : `Baixa de Retorno: ${activeCarregamento.evento || "Patrocínio"}`}
+                  </span>
                 </h3>
                 <p className="text-xs text-ink-secondary mt-0.5">
                   Informe a quantidade que retornou não utilizada para a câmara.
