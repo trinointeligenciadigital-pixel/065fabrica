@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-bg-glacial: #EEF3F4;
+  --color-surface-card: #FFFFFF;
+  --color-ink-primary: #12262C;
+  --color-ink-secondary: #5B7078;
+  --color-brand-primary: #0E7C9C;
+  --color-brand-success: #1F8A5B;
+  --color-brand-success-bg: #E6F4EA;
+  --color-brand-error: #C93A42;
+  --color-brand-error-bg: #FCE8E6;
+  --color-brand-warning: #B97A0F;
+  --color-brand-warning-bg: #FEF7E0;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-glacial: 10px;
+
+  --shadow-glacial: 0 2px 8px rgba(18, 38, 44, 0.04);
+
+  --animate-fade-in: fade-in 0.15s ease-out;
+  --animate-scale-in: scale-in 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-left: slide-in-left 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+}
+
+:root {
+  background-color: var(--color-bg-glacial);
+  color: var(--color-ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Números tabulares para garantir alinhamento vertical */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Premium UI Custom Classes --- */
+
+/* Glassmorphism Card styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(91, 112, 120, 0.12);
+  box-shadow: 0 4px 20px -2px rgba(18, 38, 44, 0.03), 0 2px 8px -1px rgba(18, 38, 44, 0.02);
+}
+
+/* Interactive card hover boost */
+.interactive-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.interactive-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px rgba(18, 38, 44, 0.06), 0 8px 12px -4px rgba(18, 38, 44, 0.04);
+  border-color: rgba(14, 124, 156, 0.2);
+}
+
+/* Gradient effects */
+.bg-gradient-glacial-teal {
+  background: linear-gradient(135deg, #0e7c9c 0%, #06b6d4 100%);
+}
+.bg-gradient-sidebar {
+  background: linear-gradient(180deg, #12262c 0%, #071317 100%);
+}
+
+.text-gradient-teal {
+  background: linear-gradient(135deg, #0e7c9c, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtle glowing accent animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0px rgba(14, 124, 156, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(14, 124, 156, 0.4);
+  }
+}
+.animate-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Clean Custom Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle custom scrollbar for dashboard lists and tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(91, 112, 120, 0.03);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(91, 112, 120, 0.20);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(91, 112, 120, 0.35);
+}
