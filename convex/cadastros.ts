@@ -311,10 +311,18 @@ export const obterCamaraPorSlug = query({
   },
 });
 
+export const obterCamara = query({
+  args: { id: v.id("camaras") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
 export const criarCamara = mutation({
   args: {
     nome: v.string(),
     slug: v.string(),
+    produtosIds: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
@@ -334,6 +342,7 @@ export const criarCamara = mutation({
       nome: args.nome,
       slug: slugLimpo,
       ativo: true,
+      produtos_ids: args.produtosIds || [],
     });
   },
 });
@@ -671,6 +680,7 @@ export const atualizarCamara = mutation({
     id: v.id("camaras"),
     nome: v.string(),
     slug: v.string(),
+    produtosIds: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
@@ -689,6 +699,7 @@ export const atualizarCamara = mutation({
     await ctx.db.patch(args.id, {
       nome: args.nome,
       slug: slugLimpo,
+      produtos_ids: args.produtosIds || [],
     });
   },
 });

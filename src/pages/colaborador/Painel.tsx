@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import { Snowflake, PlusCircle, Truck, TrendingDown, LogOut, ArrowRight } from "lucide-react";
+import { Snowflake, PlusCircle, TrendingDown, LogOut, ArrowRight, DollarSign, Gift } from "lucide-react";
 
 export default function Painel() {
   const [, setLocation] = useLocation();
@@ -121,22 +121,41 @@ export default function Painel() {
             </button>
           )}
 
-          {/* Lançar Carregamento */}
+          {/* Registrar Venda */}
           {(colaborador.permissao === "saidas" || colaborador.permissao === "ambas") && (
             <button
-              onClick={() => setLocation("/colaborador/lancar/carregamento")}
+              onClick={() => setLocation("/colaborador/lancar/venda")}
               className="w-full min-h-[96px] bg-surface-card hover:border-brand-success active:bg-brand-success-bg border border-[rgba(91,112,120,0.2)] rounded-glacial p-6 text-left flex items-center justify-between transition-all cursor-pointer shadow-glacial"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 rounded-glacial bg-brand-success/10 flex items-center justify-center border border-brand-success/10 text-brand-success shrink-0">
-                  <Truck className="w-6 h-6" />
+                  <DollarSign className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-ink-primary">Lançar Carregamento</h2>
-                  <p className="text-xs text-ink-secondary">Saída de carga para vendas ou patrocínios</p>
+                  <h2 className="text-sm font-bold text-ink-primary">Registrar Venda</h2>
+                  <p className="text-xs text-ink-secondary">Saída de carga faturada para clientes</p>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-brand-success shrink-0" />
+            </button>
+          )}
+
+          {/* Registrar Patrocínio */}
+          {(colaborador.permissao === "saidas" || colaborador.permissao === "ambas") && (
+            <button
+              onClick={() => setLocation("/colaborador/lancar/patrocinio")}
+              className="w-full min-h-[96px] bg-surface-card hover:border-brand-primary active:bg-[rgba(14,124,156,0.05)] border border-[rgba(91,112,120,0.2)] rounded-glacial p-6 text-left flex items-center justify-between transition-all cursor-pointer shadow-glacial"
+            >
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-glacial bg-brand-primary/10 flex items-center justify-center border border-brand-primary/10 text-brand-primary shrink-0">
+                  <Gift className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-bold text-ink-primary">Registrar Patrocínio</h2>
+                  <p className="text-xs text-ink-secondary">Saída de gelo para eventos e parcerias</p>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-brand-primary shrink-0" />
             </button>
           )}
 

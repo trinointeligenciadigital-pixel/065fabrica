@@ -18,8 +18,9 @@ interface CarregamentoItem {
 
 export default function Lancamentos() {
   const [, setLocation] = useLocation();
-  const params = useParams<{ tipo: "producao" | "carregamento" | "perda" }>();
+  const params = useParams<{ tipo: "producao" | "carregamento" | "perda" | "venda" | "patrocinio" }>();
   const flow = params.tipo;
+  const isCarregamento = flow === "carregamento" || flow === "venda" || flow === "patrocinio";
 
   // Credenciais da sessão do colaborador
   const token = localStorage.getItem("colab_token") || "";
@@ -42,6 +43,14 @@ export default function Lancamentos() {
 
   // Queries para formulários
   const produtos = useQuery(api.cadastros.listarProdutosAtivos);
+  const camaraDetalhes = useQuery(api.cadastros.obterCamara, camaraId ? { id: camaraId } : "skip");
+
+  const produtosFiltrados = produtos?.filter((prod) => {
+    if (!camaraDetalhes?.produtos_ids || camaraDetalhes.produtos_ids.length === 0) {
+      return true;
+    }
+    return camaraDetalhes.produtos_ids.includes(prod._id);
+  });
   const sabores = useQuery(api.cadastros.listarSaboresAtivos);
   const formatos = useQuery(api.cadastros.listarFormatosPacoteAtivos);
   const veiculos = useQuery(api.cadastros.listarVeiculosAtivos);
@@ -115,7 +124,15 @@ export default function Lancamentos() {
   );
 
   // Carregamento states
-  const [tipoCarregamento, setTipoCarregamento] = useState<"venda" | "patrocinio">("venda");
+  const [tipoCarregamento, setTipoCarregamento] = useState<"venda" | "patrocinio">(
+    flow === "patrocinio" ? "patrocinio" : "venda"
+  );
+
+  useEffect(() => {
+    if (flow === "patrocinio" || flow === "venda") {
+      setTipoCarregamento(flow);
+    }
+  }, [flow]);
   const [evento, setEvento] = useState("");
   const [motorista, setMotorista] = useState("");
   const [veiculoTipo, setVeiculoTipo] = useState<"proprio" | "terceiro">("proprio");
@@ -176,7 +193,7 @@ export default function Lancamentos() {
       } else if (step === 5 && flow === "perda") {
         setStep(4);
       }
-    } else if (flow === "carregamento") {
+    } else if (isCarregamento) {
       if (subStep > 0) {
         // Cancelar sub-wizard de item e voltar pra lista
         if (subStep === 1) {
@@ -269,7 +286,7 @@ export default function Lancamentos() {
           motivoPerdaId: selectedMotivo!._id,
           observacao: observacao || undefined,
         });
-      } else if (flow === "carregamento") {
+      } else if (isCarregamento) {
         const payloadClienteId = (tipoCarregamento === "venda" && selectedClienteId !== "avulso" && selectedClienteId) ? (selectedClienteId as Id<"clientes">) : undefined;
         const selectedClienteObj = payloadClienteId ? clientes?.find(c => c._id === payloadClienteId) : null;
         const payloadClienteNome = (tipoCarregamento === "venda") 
@@ -503,7 +520,7 @@ export default function Lancamentos() {
               <div className="flex-1 flex flex-col">
                 <h2 className="text-sm font-bold text-ink-primary mb-4 text-left">Passo 1: Selecione o Produto</h2>
                 <div className="space-y-2 flex-1 overflow-y-auto max-h-[350px] pr-1">
-                  {produtos?.map((prod) => {
+                  {produtosFiltrados?.map((prod) => {
                     const saldoTotal = getProductTotalSaldo(prod._id);
                     return (
                       <button
@@ -555,7 +572,7 @@ export default function Lancamentos() {
                           }}
                           className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] hover:border-brand-primary active:bg-[rgba(14,124,156,0.05)] rounded-glacial px-4 py-4 text-sm font-bold text-ink-primary cursor-pointer min-h-[56px] flex items-center justify-between"
                         >
-                          <span>🍉 {sab.nome}</span>
+                          <span>{sab.nome}</span>
                           <span className="text-[10px] font-semibold font-mono text-ink-secondary">
                             Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                           </span>
@@ -794,42 +811,46 @@ export default function Lancamentos() {
         {/* ==========================================
            WIZARD FLOW: CARREGAMENTO (SAÍDA COMPLEXA)
            ========================================== */}
-        {flow === "carregamento" && (
+        {isCarregamento && (
           <div className="flex-1 flex flex-col justify-between bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6">
             
             {/* Step 1: Dados do Carregamento (Venda/Patrocínio + Detalhes) */}
             {step === 1 && (
               <div className="flex-1 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <h2 className="text-sm font-bold text-ink-primary mb-2 text-left">Passo 1: Tipo de Saída & Operação</h2>
+                  <h2 className="text-sm font-bold text-ink-primary mb-2 text-left">
+                    {flow === "carregamento" ? "Passo 1: Tipo de Saída & Operação" : `Passo 1: Detalhes de ${tipoCarregamento === "venda" ? "Venda" : "Patrocínio"}`}
+                  </h2>
                   
-                  {/* Toggle Venda / Patrocínio */}
-                  <div className="grid grid-cols-2 gap-2 bg-bg-glacial p-1 rounded-glacial border border-[rgba(91,112,120,0.15)] mb-2">
-                    <button
-                      type="button"
-                      onClick={() => setTipoCarregamento("venda")}
-                      className={`py-2 text-xs font-bold rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5 ${
-                        tipoCarregamento === "venda"
-                          ? "bg-white text-ink-primary shadow"
-                          : "text-ink-secondary"
-                      }`}
-                    >
-                      <DollarSign className="w-3.5 h-3.5 text-brand-primary" />
-                      <span>Venda Comercial</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setTipoCarregamento("patrocinio")}
-                      className={`py-2 text-xs font-bold rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5 ${
-                        tipoCarregamento === "patrocinio"
-                          ? "bg-white text-brand-primary shadow"
-                          : "text-ink-secondary"
-                      }`}
-                    >
-                      <Gift className="w-3.5 h-3.5 text-brand-primary" />
-                      <span>Patrocínio</span>
-                    </button>
-                  </div>
+                  {/* Toggle Venda / Patrocínio - Só exibe se a rota for genérica (carregamento) */}
+                  {flow === "carregamento" && (
+                    <div className="grid grid-cols-2 gap-2 bg-bg-glacial p-1 rounded-glacial border border-[rgba(91,112,120,0.15)] mb-2">
+                      <button
+                        type="button"
+                        onClick={() => setTipoCarregamento("venda")}
+                        className={`py-2 text-xs font-bold rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5 ${
+                          tipoCarregamento === "venda"
+                            ? "bg-white text-ink-primary shadow"
+                            : "text-ink-secondary"
+                        }`}
+                      >
+                        <DollarSign className="w-3.5 h-3.5 text-brand-primary" />
+                        <span>Venda Comercial</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTipoCarregamento("patrocinio")}
+                        className={`py-2 text-xs font-bold rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5 ${
+                          tipoCarregamento === "patrocinio"
+                            ? "bg-white text-brand-primary shadow"
+                            : "text-ink-secondary"
+                        }`}
+                      >
+                        <Gift className="w-3.5 h-3.5 text-brand-primary" />
+                        <span>Patrocínio</span>
+                      </button>
+                    </div>
+                  )}
 
                   {/* Selecionar Cliente se for Venda */}
                   {tipoCarregamento === "venda" && (
@@ -1082,7 +1103,7 @@ export default function Lancamentos() {
                       <div className="flex-1 flex flex-col">
                         <h3 className="text-xs font-bold text-ink-secondary mb-3 text-left">Lançar Item (Escolha o Produto)</h3>
                         <div className="space-y-2 flex-1 overflow-y-auto max-h-[260px] pr-1">
-                          {produtos?.map((prod) => {
+                          {produtosFiltrados?.map((prod) => {
                             const saldoTotal = getProductTotalSaldo(prod._id);
                             return (
                               <button
@@ -1133,7 +1154,7 @@ export default function Lancamentos() {
                                   }}
                                   className="w-full text-left bg-bg-glacial border border-[rgba(91,112,120,0.12)] rounded-glacial px-4 py-3.5 text-xs font-bold text-ink-primary cursor-pointer min-h-[48px] flex items-center justify-between"
                                 >
-                                  <span>🍉 {sab.nome}</span>
+                                  <span>{sab.nome}</span>
                                   <span className="text-[9px] font-semibold font-mono text-ink-secondary">
                                     Disponível: {saldosCamara !== undefined ? `${saldo.toLocaleString("pt-BR")} ${selectedProduto.unidade}s` : "..."}
                                   </span>

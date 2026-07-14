@@ -24,6 +24,7 @@ export default defineSchema({
     nome: v.string(),
     slug: v.string(), // Utilizado no link do QR Code
     ativo: v.boolean(),
+    produtos_ids: v.optional(v.array(v.string())),
   }).index("by_slug", ["slug"]),
 
   colaboradores: defineTable({

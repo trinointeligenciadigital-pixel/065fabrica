@@ -228,6 +228,7 @@ export default function Cadastros() {
             id: editingId as Id<"camaras">,
             nome: formData.nome,
             slug: formData.slug,
+            produtosIds: selectedCamaras,
           });
         } else if (activeTab === "colaboradores") {
           await atualizarColaborador({
@@ -282,6 +283,7 @@ export default function Cadastros() {
           await criarCamara({
             nome: formData.nome,
             slug: formData.slug,
+            produtosIds: selectedCamaras,
           });
         } else if (activeTab === "colaboradores") {
           if (!/^\d{4}$/.test(formData.pin)) {
@@ -350,6 +352,7 @@ export default function Cadastros() {
   const handleEditCamara = (cam: Doc<"camaras">) => {
     setEditingId(cam._id);
     setFormData({ nome: cam.nome, slug: cam.slug });
+    setSelectedCamaras(cam.produtos_ids || []);
     setError(null);
     setModalOpen(true);
   };
@@ -626,6 +629,7 @@ export default function Cadastros() {
             <tr className="border-b border-[rgba(91,112,120,0.15)] text-ink-secondary text-xs uppercase tracking-wider">
               <th className="py-3 px-4 font-semibold">Nome</th>
               <th className="py-3 px-4 font-semibold">Slug (Identificador)</th>
+              <th className="py-3 px-4 font-semibold">Produtos Armazenados</th>
               <th className="py-3 px-4 font-semibold">Status</th>
               <th className="py-3 px-4 font-semibold">Etiqueta QR</th>
               <th className="py-3 px-4 font-semibold text-right">Ações</th>
@@ -636,6 +640,22 @@ export default function Cadastros() {
               <tr key={cam._id} className="hover:bg-[rgba(91,112,120,0.02)] transition-all">
                 <td className="py-3 px-4 font-medium text-ink-primary">{cam.nome}</td>
                 <td className="py-3 px-4 font-mono text-ink-secondary text-xs">{cam.slug}</td>
+                <td className="py-3 px-4">
+                  <div className="flex flex-wrap gap-1 max-w-[220px]">
+                    {cam.produtos_ids && cam.produtos_ids.length > 0 ? (
+                      cam.produtos_ids.map((pid) => {
+                        const prod = produtos?.find(p => p._id === pid);
+                        return prod ? (
+                          <span key={pid} className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0.5 rounded font-medium">
+                            {prod.nome}
+                          </span>
+                        ) : null;
+                      })
+                    ) : (
+                      <span className="text-xs text-ink-secondary italic">Todos os produtos</span>
+                    )}
+                  </div>
+                </td>
                 <td className="py-3 px-4">{renderStatusBadge(cam.ativo)}</td>
                 <td className="py-3 px-4">
                   {cam.ativo && <QRGenerator nome={cam.nome} slug={cam.slug} />}
@@ -1489,6 +1509,26 @@ export default function Cadastros() {
                       placeholder="Ex: camara-de-cubos"
                       className="w-full bg-bg-glacial text-sm px-4 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] font-mono text-xs focus:outline-none focus:ring-1 focus:ring-brand-primary"
                     />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-ink-primary block mb-2">Produtos Armazenados nesta Câmara</label>
+                    {produtos && produtos.length > 0 ? (
+                      <div className="space-y-2 max-h-40 overflow-y-auto bg-bg-glacial p-3 rounded-glacial border border-[rgba(91,112,120,0.1)]">
+                        {produtos.map((p: Doc<"produtos">) => (
+                          <label key={p._id} className="flex items-center space-x-2 text-xs text-ink-primary cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={selectedCamaras.includes(p._id)}
+                              onChange={() => handleCheckboxChange(p._id)}
+                              className="rounded border-[rgba(91,112,120,0.15)] text-brand-primary focus:ring-brand-primary"
+                            />
+                            <span>{p.nome} ({p.unidade})</span>
+                          </label>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-brand-error italic">Nenhum produto cadastrado.</p>
+                    )}
                   </div>
                 </>
               )}
