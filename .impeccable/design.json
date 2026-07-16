@@ -7,14 +7,14 @@
       "primary": {
         "role": "primary",
         "displayName": "Azul Glacial",
-        "canonical": "#0E7C9C",
-        "tonalRamp": ["#03222b", "#064656", "#0a6a82", "#0e7c9c", "#21a6c9", "#58c8e6", "#9fe1f2", "#e8f7fa"]
+        "canonical": "#0284C7",
+        "tonalRamp": ["#082f49", "#0c4a6e", "#0369a1", "#0284c7", "#0ea5e9", "#38bdf8", "#7dd3fc", "#bae6fd"]
       },
       "neutral-bg": {
         "role": "neutral",
         "displayName": "Fundo Glacial",
-        "canonical": "#EEF3F4",
-        "tonalRamp": ["#1b2123", "#3a464a", "#5b7078", "#889ba2", "#b3c1c6", "#d4dee0", "#eef3f4", "#f7fafb"]
+        "canonical": "#F8FAFC",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
       }
     },
     "typographyMeta": {
@@ -63,7 +63,7 @@
       "refersTo": "button-primary",
       "description": "Botão de ação principal no mobile e no admin.",
       "html": "<button class=\"ds-btn-primary\">CONFIRMAR QUANTIDADE</button>",
-      "css": ".ds-btn-primary { background: #0E7C9C; color: #FFFFFF; font-family: 'Geist Sans', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 14px 24px; cursor: pointer; transition: all 0.2s; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:active { transform: scale(0.98); }"
+      "css": ".ds-btn-primary { background: #0284C7; color: #FFFFFF; font-family: 'Geist Sans', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 14px 24px; cursor: pointer; transition: all 0.2s; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:active { transform: scale(0.98); }"
     },
     {
       "name": "Card de Produto",
@@ -71,7 +71,7 @@
       "refersTo": "card",
       "description": "Card para agrupar informações de produtos ou sabores.",
       "html": "<div class=\"ds-card\"><h4>Gelo Saborizado</h4><p>Saldo: 140 pacotes</p></div>",
-      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(91, 112, 120, 0.15); border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(18, 38, 44, 0.04); font-family: 'Geist Sans', sans-serif; } .ds-card h4 { margin: 0 0 8px 0; color: #12262C; font-size: 14px; font-weight: 700; } .ds-card p { margin: 0; color: #5B7078; font-size: 12px; }"
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(148, 163, 184, 0.12); border-radius: 10px; padding: 20px; box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03), 0 2px 8px -1px rgba(15, 23, 42, 0.02); font-family: 'Geist Sans', sans-serif; } .ds-card h4 { margin: 0 0 8px 0; color: #0F172A; font-size: 14px; font-weight: 700; } .ds-card p { margin: 0; color: #475569; font-size: 12px; }"
     }
   ],
   "narrative": {

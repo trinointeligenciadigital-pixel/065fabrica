@@ -162,7 +162,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Gráfico 1: Evolução Semanal (2/3 da largura) */}
-        <div className="lg:col-span-2 bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-5 flex flex-col justify-between interactive-card">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
@@ -325,7 +325,7 @@ export default function Dashboard() {
         </div>
 
         {/* Gráfico 2: Desperdício e Distribuição de Saídas (1/3 da largura) */}
-        <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 flex flex-col justify-between">
+        <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-5 flex flex-col justify-between interactive-card">
           <div>
             {/* Abas de seleção */}
             <div className="flex items-center space-x-4 mb-4 border-b border-[rgba(91,112,120,0.08)] pb-2.5">
@@ -493,7 +493,7 @@ export default function Dashboard() {
         <div className="lg:col-span-2">
           
           {/* Alertas de Reposição */}
-          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 h-full flex flex-col justify-between">
+          <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-5 h-full flex flex-col justify-between interactive-card">
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Layers className="w-4 h-4 text-ink-primary" />
@@ -548,7 +548,7 @@ export default function Dashboard() {
 
         {/* Lado Direito: Feed de Atividades Recentes */}
         <div className="space-y-6">
-          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 h-full flex flex-col justify-between">
+          <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-5 h-full flex flex-col justify-between interactive-card">
             <div>
               <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.1)] pb-4 mb-4">
                 <div className="flex items-center space-x-2">
@@ -620,7 +620,7 @@ export default function Dashboard() {
               return (
                 <div
                   key={idx}
-                  className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 flex flex-col justify-between transition-all hover:translate-y-[-2px] hover:shadow-active"
+                  className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-5 flex flex-col justify-between interactive-card"
                 >
                   <div>
                     <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.1)] pb-2.5 mb-3">

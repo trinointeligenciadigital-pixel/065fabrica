@@ -597,7 +597,7 @@ export default function Carregamentos() {
       </div>
 
       {/* Filtros */}
-      <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-4 sm:p-5 mb-6">
+      <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-4 sm:p-5 mb-6 interactive-card">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Busca Livre */}
           <div className="relative">
@@ -664,7 +664,7 @@ export default function Carregamentos() {
       </div>
 
       {/* Tabela de Carregamentos */}
-      <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-4 sm:p-6 overflow-x-auto">
+      <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-4 sm:p-6 overflow-x-auto interactive-card">
         {!carregamentos ? (
           <div className="text-center py-12 text-ink-secondary text-sm">Carregando carregamentos...</div>
         ) : filteredCarregamentos && filteredCarregamentos.length === 0 ? (

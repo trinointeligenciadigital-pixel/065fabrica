@@ -2,14 +2,14 @@
 name: Estoque 065
 description: Controle de expedição operacional e gestão física de câmara fria.
 colors:
-  primary: "#0E7C9C"
-  neutral-bg: "#EEF3F4"
+  primary: "#0284C7"
+  neutral-bg: "#F8FAFC"
   surface: "#FFFFFF"
-  ink-primary: "#12262C"
-  ink-secondary: "#5B7078"
-  brand-success: "#1F8A5B"
-  brand-error: "#C93A42"
-  brand-warning: "#B97A0F"
+  ink-primary: "#0F172A"
+  ink-secondary: "#475569"
+  brand-success: "#10B981"
+  brand-error: "#EF4444"
+  brand-warning: "#F59E0B"
 typography:
   display:
     fontFamily: "Geist Sans, system-ui, -apple-system, sans-serif"
@@ -71,18 +71,18 @@ Rejeitamos interfaces web genéricas espremidas na tela mobile, cores pastéis d
 A paleta de cores inspira-se no ambiente de refrigeração e aço escovado, contrastando um azul glacial profundo com tons escuros funcionais de alta visibilidade.
 
 ### Primary
-- **Azul Glacial** (#0E7C9C): A cor de marca e elemento principal de ação no sistema. Usada para botões primários, links ativos e marcação de status importantes.
+- **Azul Glacial** (#0284C7): A cor de marca e elemento principal de ação no sistema. Usada para botões primários, links ativos e marcação de status importantes.
 
 ### Neutral
-- **Fundo Glacial** (#EEF3F4): Cor de fundo principal da aplicação. Um cinza-azulado muito claro e frio que evita o brilho excessivo do branco total no celular.
+- **Fundo Glacial** (#F8FAFC): Cor de fundo principal da aplicação. Um slate muito claro e moderno que dá um aspecto de produto SaaS premium.
 - **Superfície Branca** (#FFFFFF): Usada para fundos de cards e modais, criando uma divisão visual sutil contra o fundo glacial.
-- **Tinta Primária** (#12262C): Azul escuro quase negro. Usada para títulos e textos principais para garantir contraste máximo de leitura.
-- **Tinta Secundária** (#5B7078): Cinza intermediário. Usada para descrições secundárias e ícones decorativos.
+- **Tinta Primária** (#0F172A): Slate escuro quase negro. Usada para títulos e textos principais para garantir contraste máximo de leitura.
+- **Tinta Secundária** (#475569): Cinza ardósia intermediário. Usada para descrições secundárias e ícones decorativos.
 
 ### Feedback
-- **Verde Sucesso** (#1F8A5B): Indica finalização de transações corretas, confirmações e balanço de estoque positivo.
-- **Vermelho Erro** (#C93A42): Usado para avisos de saldo insuficiente, exclusões e alertas críticos.
-- **Amarelo Alerta** (#B97A0F): Usado para transações pendentes de retorno.
+- **Verde Sucesso** (#10B981): Indica finalização de transações corretas, confirmações e balanço de estoque positivo.
+- **Vermelho Erro** (#EF4444): Usado para avisos de saldo insuficiente, exclusões e alertas críticos.
+- **Amarelo Alerta** (#F59E0B): Usado para transações pendentes de retorno.
 
 **The Contrast Rule.** Todo text principal ou botão de ação deve manter contraste superior a 4.5:1 contra a sua cor de superfície de fundo. Cores pastéis fracas são expressamente proibidas para rótulos de leitura.
 

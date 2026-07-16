@@ -290,7 +290,7 @@ export default function Movimentacoes() {
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Total Produzido */}
-        <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 flex items-center justify-between transition-all hover:translate-y-[-2px]">
+        <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-6 flex items-center justify-between interactive-card">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Entradas Totais</p>
             <h3 className="text-2xl font-bold text-ink-primary font-mono tracking-tight tabular-nums">
@@ -304,7 +304,7 @@ export default function Movimentacoes() {
         </div>
 
         {/* Total Saído / Vendido */}
-        <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 flex items-center justify-between transition-all hover:translate-y-[-2px]">
+        <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-6 flex items-center justify-between interactive-card">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Saídas de Carga</p>
             <h3 className="text-2xl font-bold text-ink-primary font-mono tracking-tight tabular-nums">
@@ -318,7 +318,7 @@ export default function Movimentacoes() {
         </div>
 
         {/* Total Perdas */}
-        <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 flex items-center justify-between transition-all hover:translate-y-[-2px]">
+        <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-6 flex items-center justify-between interactive-card">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Descartes / Perdas</p>
             <h3 className="text-2xl font-bold text-ink-primary font-mono tracking-tight tabular-nums">
@@ -333,7 +333,7 @@ export default function Movimentacoes() {
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-4 sm:p-5 mb-6">
+      <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-4 sm:p-5 mb-6 interactive-card">
         <div className="flex items-center space-x-2 mb-4 text-ink-primary">
           <Filter className="w-4 h-4" />
           <span className="text-sm font-bold">Filtros de Lançamentos</span>
@@ -440,7 +440,7 @@ export default function Movimentacoes() {
       </div>
 
       {/* Table Container */}
-      <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-4 sm:p-6 overflow-x-auto">
+      <div className="bg-surface-card rounded-glacial border border-slate-100 shadow-glacial p-4 sm:p-6 overflow-x-auto interactive-card">
         {!historico ? (
           <div className="text-center py-12 text-ink-secondary text-sm">Carregando histórico...</div>
         ) : filteredHistorico && filteredHistorico.length === 0 ? (

@@ -215,13 +215,13 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-x-hidden">
+      <main className="flex-1 flex flex-col overflow-x-hidden bg-gradient-to-tr from-slate-50 via-slate-50 to-sky-50/15">
         {/* Mobile Header with Hamburger Menu Toggle */}
-        <header className="md:hidden bg-surface-card border-b border-[rgba(91,112,120,0.15)] px-6 py-4 flex items-center justify-between">
+        <header className="md:hidden bg-surface-card border-b border-slate-200/85 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-1.5 rounded-lg border border-[rgba(91,112,120,0.15)] text-ink-secondary hover:text-ink-primary hover:bg-bg-glacial transition-all cursor-pointer"
+              className="p-1.5 rounded-lg border border-slate-200/85 text-ink-secondary hover:text-ink-primary hover:bg-bg-glacial transition-all cursor-pointer"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -230,7 +230,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <span className="font-bold text-ink-primary text-sm tracking-tight">Estoque 065</span>
             </div>
           </div>
-          <div className="border border-[rgba(91,112,120,0.1)] rounded-full p-0.5 bg-bg-glacial flex items-center justify-center">
+          <div className="border border-slate-100 rounded-full p-0.5 bg-bg-glacial flex items-center justify-center">
             <UserButton afterSignOutUrl="/" />
           </div>
         </header>
