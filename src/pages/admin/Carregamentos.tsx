@@ -83,6 +83,36 @@ export default function Carregamentos() {
   const [lossError, setLossError] = useState<string | null>(null);
   const [lossSaving, setLossSaving] = useState(false);
 
+  // Filtro de produtos para Novo Carregamento baseados na câmara selecionada
+  const selectedNewCamaraObj = camaras?.find((c) => c._id === newCamaraId);
+  const productsForNewCarregamento = produtos?.filter((p) => {
+    if (!selectedNewCamaraObj || !selectedNewCamaraObj.produtos_ids || selectedNewCamaraObj.produtos_ids.length === 0) {
+      return true;
+    }
+    return selectedNewCamaraObj.produtos_ids.includes(p._id);
+  });
+
+  // Limpar itens quando a câmara do novo carregamento mudar
+  useEffect(() => {
+    setNewItens([]);
+  }, [newCamaraId]);
+
+  // Filtro de produtos para o modal de Perda baseados na câmara selecionada
+  const selectedLossCamaraObj = camaras?.find((c) => c._id === lossCamaraId);
+  const productsForLoss = produtos?.filter((p) => {
+    if (!selectedLossCamaraObj || !selectedLossCamaraObj.produtos_ids || selectedLossCamaraObj.produtos_ids.length === 0) {
+      return true;
+    }
+    return selectedLossCamaraObj.produtos_ids.includes(p._id);
+  });
+
+  // Limpar seleções de produto quando a câmara da perda mudar
+  useEffect(() => {
+    setLossProdutoId("");
+    setLossSaborId("");
+    setLossFormatoId("");
+  }, [lossCamaraId]);
+
   // Encontrar carregamento ativo nos dados locais
   const activeCarregamento = carregamentos?.find((c) => c._id === selectedCarregamentoId);
 
@@ -1259,7 +1289,7 @@ export default function Carregamentos() {
                               className="w-full bg-white text-xs px-2.5 py-1.5 rounded border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
                             >
                               <option value="">Selecione o produto...</option>
-                              {produtos?.map((p) => (
+                              {productsForNewCarregamento?.map((p) => (
                                 <option key={p._id} value={p._id}>
                                   {p.nome}
                                 </option>
@@ -1550,7 +1580,7 @@ export default function Carregamentos() {
                     className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
                   >
                     <option value="">Selecione o produto...</option>
-                    {produtos?.map((p) => (
+                    {productsForLoss?.map((p) => (
                       <option key={p._id} value={p._id}>
                         {p.nome}
                       </option>
