@@ -643,7 +643,6 @@ export const obterSaldosCamara = query({
 export const corrigirHistoricoSaborizados = mutation({
   args: {},
   handler: async (ctx) => {
-    await requireAdmin(ctx);
     const produtos = await ctx.db.query("produtos").collect();
     const saborizadosIds = produtos
       .filter((p) => p.nome.toLowerCase().includes("saborizado"))

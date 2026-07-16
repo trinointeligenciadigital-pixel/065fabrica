@@ -68,6 +68,9 @@ export const abrirContagem = mutation({
     const admin = await requireAdmin(ctx);
     const autorNome = admin.name || admin.email;
 
+    const camara = await ctx.db.get(args.camaraId);
+    if (!camara) throw new Error("Câmara não encontrada.");
+
     // 3. Buscar todas as entidades ativas para compor o checklist
     const produtos = await ctx.db
       .query("produtos")
@@ -82,9 +85,17 @@ export const abrirContagem = mutation({
       .filter((q) => q.eq(q.field("ativo"), true))
       .collect();
 
+    // Filtra produtos vinculados a esta câmara fria
+    const produtosFiltrados = produtos.filter((prod) => {
+      if (!camara.produtos_ids || camara.produtos_ids.length === 0) {
+        return true;
+      }
+      return camara.produtos_ids.includes(prod._id);
+    });
+
     // 4. Montar a lista de itens com seus saldos de estoque atuais
     const itens = [];
-    for (const prod of produtos) {
+    for (const prod of produtosFiltrados) {
       if (prod.nome.toLowerCase().includes("saborizado")) {
         // Produtos saborizados combinam com todos os sabores ativos
         for (const sab of sabores) {

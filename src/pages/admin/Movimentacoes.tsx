@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import {
@@ -53,6 +53,41 @@ export default function Movimentacoes() {
   const selectedProdObj = produtosAtivos?.find(p => p._id === modalProduto);
   const produtoPrecisaSabor = selectedProdObj?.nome.toLowerCase().includes("saborizado");
   const produtoPrecisaFormato = selectedProdObj?.unidade === "pacote" && !produtoPrecisaSabor;
+
+  // Filtro dinâmico para os produtos do dropdown de filtros baseados na câmara selecionada
+  const selectedCamaraObj = camaras?.find(c => c.nome === selectedCamara);
+  const produtosFiltradosDropdown = produtos?.filter((p) => {
+    if (!selectedCamaraObj || !selectedCamaraObj.produtos_ids || selectedCamaraObj.produtos_ids.length === 0) {
+      return true;
+    }
+    return selectedCamaraObj.produtos_ids.includes(p._id);
+  });
+
+  // Efeito para resetar o produto selecionado nos filtros caso mude a câmara e ele não pertença a ela
+  useEffect(() => {
+    if (selectedProduto && selectedCamaraObj && selectedCamaraObj.produtos_ids && selectedCamaraObj.produtos_ids.length > 0) {
+      const prodNoFiltro = produtos?.find(p => p.nome === selectedProduto);
+      if (prodNoFiltro && !selectedCamaraObj.produtos_ids.includes(prodNoFiltro._id)) {
+        setSelectedProduto("");
+      }
+    }
+  }, [selectedCamara, selectedProduto, selectedCamaraObj, produtos]);
+
+  // Filtro de produtos para o modal de produção baseados na câmara do modal selecionada
+  const selectedModalCamaraObj = camarasAtivas?.find(c => c._id === modalCamara);
+  const produtosModalFiltrados = produtosAtivos?.filter((p) => {
+    if (!selectedModalCamaraObj || !selectedModalCamaraObj.produtos_ids || selectedModalCamaraObj.produtos_ids.length === 0) {
+      return true;
+    }
+    return selectedModalCamaraObj.produtos_ids.includes(p._id);
+  });
+
+  // Limpar produto selecionado no modal se a câmara do modal mudar
+  useEffect(() => {
+    setModalProduto("");
+    setModalSabor("");
+    setModalFormato("");
+  }, [modalCamara]);
 
   const handleSubmitProducao = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -323,7 +358,7 @@ export default function Movimentacoes() {
               className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer"
             >
               <option value="">Todos os produtos</option>
-              {produtos?.map((p) => (
+              {produtosFiltradosDropdown?.map((p) => (
                 <option key={p._id} value={p.nome}>
                   {p.nome}
                 </option>
@@ -541,7 +576,7 @@ export default function Movimentacoes() {
                   required
                 >
                   <option value="">Selecione o produto</option>
-                  {produtosAtivos?.map((p) => (
+                  {produtosModalFiltrados?.map((p) => (
                     <option key={p._id} value={p._id}>
                       {p.nome} ({p.unidade === "pacote" ? "pacote" : "kg"})
                     </option>
