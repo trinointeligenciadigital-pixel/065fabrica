@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-16T17:32:00Z",
+  "generatedAt": "2026-07-16T15:07:00Z",
   "title": "Design System: Estoque 065",
   "extensions": {
     "colorMeta": {
@@ -63,7 +63,7 @@
       "refersTo": "button-primary",
       "description": "Botão de ação principal no mobile e no admin.",
       "html": "<button class=\"ds-btn-primary\">CONFIRMAR QUANTIDADE</button>",
-      "css": ".ds-btn-primary { background: #0E7C9C; color: #FFFFFF; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 14px 24px; cursor: pointer; transition: all 0.2s; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:active { transform: scale(0.98); }"
+      "css": ".ds-btn-primary { background: #0E7C9C; color: #FFFFFF; font-family: 'Geist Sans', sans-serif; font-size: 14px; font-weight: 700; border: none; border-radius: 10px; padding: 14px 24px; cursor: pointer; transition: all 0.2s; } .ds-btn-primary:hover { opacity: 0.9; } .ds-btn-primary:active { transform: scale(0.98); }"
     },
     {
       "name": "Card de Produto",
@@ -71,7 +71,7 @@
       "refersTo": "card",
       "description": "Card para agrupar informações de produtos ou sabores.",
       "html": "<div class=\"ds-card\"><h4>Gelo Saborizado</h4><p>Saldo: 140 pacotes</p></div>",
-      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(91, 112, 120, 0.15); border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(18, 38, 44, 0.04); font-family: 'Inter', sans-serif; } .ds-card h4 { margin: 0 0 8px 0; color: #12262C; font-size: 14px; font-weight: 700; } .ds-card p { margin: 0; color: #5B7078; font-size: 12px; }"
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid rgba(91, 112, 120, 0.15); border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(18, 38, 44, 0.04); font-family: 'Geist Sans', sans-serif; } .ds-card h4 { margin: 0 0 8px 0; color: #12262C; font-size: 14px; font-weight: 700; } .ds-card p { margin: 0; color: #5B7078; font-size: 12px; }"
     }
   ],
   "narrative": {

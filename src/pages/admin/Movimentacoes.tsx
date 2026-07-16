@@ -14,6 +14,14 @@ import {
   Download
 } from "lucide-react";
 import { exportToCSV } from "../../utils/export";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../components/ui/dialog";
 
 type MovementType = "producao" | "venda" | "patrocinio" | "perda" | "ajuste" | "retorno_patrocinio";
 
@@ -270,13 +278,13 @@ export default function Movimentacoes() {
           <h2 className="text-2xl font-bold text-ink-primary tracking-tight">Histórico de Movimentações</h2>
           <p className="text-sm text-ink-secondary">Monitore e audite todas as transações e fluxos de estoque da fábrica.</p>
         </div>
-        <button
+        <Button
           onClick={() => setModalOpen(true)}
-          className="bg-brand-primary hover:bg-[rgba(14,124,156,0.9)] text-white text-xs font-bold py-2.5 px-4 rounded-glacial active:scale-[0.98] transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm w-full sm:w-auto h-[40px] shrink-0"
+          className="w-full sm:w-auto"
         >
           <span>➕</span>
           <span>Registrar Produção</span>
-        </button>
+        </Button>
       </div>
 
       {/* KPI Cards Grid */}
@@ -517,33 +525,22 @@ export default function Movimentacoes() {
       </div>
 
       {/* Modal de Registro de Produção */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div className="fixed inset-0 bg-ink-primary/45 backdrop-blur-sm" onClick={() => setModalOpen(false)} />
-          
-          {/* Card Modal */}
-          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-xl w-full max-w-md p-6 relative z-10 animate-scale-up text-left">
-            <div className="flex justify-between items-center border-b border-[rgba(91,112,120,0.1)] pb-3 mb-4">
-              <h3 className="text-sm font-bold text-ink-primary flex items-center space-x-1.5">
-                <span>❄️</span>
-                <span>Registrar Entrada de Produção</span>
-              </h3>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-ink-secondary hover:text-ink-primary font-bold text-sm cursor-pointer p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              <span>❄️</span>
+              <span>Registrar Entrada de Produção</span>
+            </DialogTitle>
+          </DialogHeader>
+
+          {modalError && (
+            <div className="mb-4 p-3 bg-rose-50 text-rose-800 border border-rose-100 rounded text-xs font-semibold">
+              {modalError}
             </div>
+          )}
 
-            {modalError && (
-              <div className="mb-4 p-3 bg-rose-50 text-rose-800 border border-rose-100 rounded text-xs font-semibold">
-                {modalError}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmitProducao} className="space-y-4">
+          <form onSubmit={handleSubmitProducao} className="space-y-4">
               {/* Câmara Fria */}
               <div>
                 <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Câmara Fria *</label>
@@ -629,38 +626,37 @@ export default function Movimentacoes() {
                 <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">
                   Quantidade ({selectedProdObj ? `${selectedProdObj.unidade}s` : "*"})
                 </label>
-                <input
+                <Input
                   type="number"
                   step="any"
                   value={modalQuantidade}
                   onChange={(e) => setModalQuantidade(e.target.value)}
                   placeholder="Ex: 150"
-                  className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink-primary"
                   required
                 />
               </div>
 
               {/* Form Actions */}
               <div className="flex space-x-3 pt-3 border-t border-[rgba(91,112,120,0.1)]">
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
                   onClick={() => setModalOpen(false)}
-                  className="flex-1 bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold text-xs py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer"
+                  className="flex-1"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={modalLoading}
-                  className="flex-1 bg-brand-primary hover:bg-[rgba(14,124,156,0.9)] disabled:opacity-55 text-white font-bold text-xs py-2.5 rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5"
+                  className="flex-1"
                 >
                   {modalLoading ? <span>Salvando...</span> : <span>Gravar Entrada</span>}
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+      </Dialog>
     </div>
   );
 }

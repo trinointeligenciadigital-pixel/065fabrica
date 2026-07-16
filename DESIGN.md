@@ -12,19 +12,19 @@ colors:
   brand-warning: "#B97A0F"
 typography:
   display:
-    fontFamily: "Inter, system-ui, -apple-system, sans-serif"
+    fontFamily: "Geist Sans, system-ui, -apple-system, sans-serif"
     fontSize: "clamp(2rem, 5vw, 3rem)"
     fontWeight: 800
     lineHeight: 1.2
     letterSpacing: "-0.03em"
   body:
-    fontFamily: "Inter, system-ui, -apple-system, sans-serif"
+    fontFamily: "Geist Sans, system-ui, -apple-system, sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: "normal"
   label:
-    fontFamily: "IBM Plex Mono, ui-monospace, SFMono-Regular, monospace"
+    fontFamily: "Geist Mono, ui-monospace, SFMono-Regular, monospace"
     fontSize: "11px"
     fontWeight: 500
     lineHeight: 1.4
@@ -90,11 +90,11 @@ A paleta de cores inspira-se no ambiente de refrigeração e aço escovado, cont
 
 ## 3. Typography
 
-**Display Font:** Inter, system-ui, -apple-system, sans-serif
-**Body Font:** Inter, system-ui, -apple-system, sans-serif
-**Label/Mono Font:** IBM Plex Mono, ui-monospace, SFMono-Regular, monospace
+**Display Font:** Geist Sans, system-ui, -apple-system, sans-serif
+**Body Font:** Geist Sans, system-ui, -apple-system, sans-serif
+**Label/Mono Font:** Geist Mono, ui-monospace, SFMono-Regular, monospace
 
-**Character:** Uma única família de alta legibilidade (Inter) para interfaces limpas e rápidas, combinada com uma fonte monoespaçada com suporte a alinhamento tabular para dados numéricos de estoque, placas e horários.
+**Character:** Uma única família de alta legibilidade (Geist Sans) para interfaces limpas e rápidas, combinada com uma fonte monoespaçada com suporte a alinhamento tabular para dados numéricos de estoque, placas e horários.
 
 ### Hierarchy
 - **Display** (Extra Bold (800), clamp(2rem, 5vw, 3rem), 1.2): Usado para grandes títulos da central de cadastros e cabeçalhos de páginas administrativas.

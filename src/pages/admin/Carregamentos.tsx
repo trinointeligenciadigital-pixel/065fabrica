@@ -22,6 +22,14 @@ import {
   Share2
 } from "lucide-react";
 import { exportToCSV } from "../../utils/export";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../components/ui/dialog";
 
 export default function Carregamentos() {
   const carregamentos = useQuery(api.carregamentos.listarCarregamentos) as any[] | undefined;
@@ -972,34 +980,24 @@ export default function Carregamentos() {
       )}
 
       {/* Modal 2: Registrar Retorno de Patrocínio */}
-      {showReturnModal && activeCarregamento && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-primary/30 backdrop-blur-[2px] animate-fade-in">
-          <div className="w-full max-w-xl bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 animate-scale-in">
-            <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.15)] pb-4 mb-4">
-              <div>
-                <h3 className="text-base font-bold text-ink-primary flex items-center space-x-2">
-                  <TrendingDown className="w-5 h-5 text-amber-500" />
-                  <span>
-                    {activeCarregamento.tipo === "venda"
-                      ? `Registrar Devolução de Venda: ${activeCarregamento.cliente_nome || "Avulso"}`
-                      : `Baixa de Retorno: ${activeCarregamento.evento || "Patrocínio"}`}
-                  </span>
-                </h3>
-                <p className="text-xs text-ink-secondary mt-0.5">
-                  Informe a quantidade que retornou não utilizada para a câmara.
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowReturnModal(false);
-                  setSelectedCarregamentoId(null);
-                  setError(null);
-                }}
-                className="text-ink-secondary hover:text-ink-primary cursor-pointer p-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Dialog open={showReturnModal} onOpenChange={(open) => {
+        if (!open) {
+          setShowReturnModal(false);
+          setSelectedCarregamentoId(null);
+          setError(null);
+        }
+      }}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>
+              <TrendingDown className="w-5 h-5 text-amber-500" />
+              <span>
+                {activeCarregamento ? (activeCarregamento.tipo === "venda"
+                  ? `Registrar Devolução de Venda: ${activeCarregamento.cliente_nome || "Avulso"}`
+                  : `Baixa de Retorno: ${activeCarregamento.evento || "Patrocínio"}`) : ""}
+              </span>
+            </DialogTitle>
+          </DialogHeader>
 
             <div className="space-y-4">
               {error && (
@@ -1058,55 +1056,42 @@ export default function Carregamentos() {
 
               {/* Botões de Ação */}
               <div className="flex items-center justify-end border-t border-[rgba(91,112,120,0.15)] pt-4 mt-2 space-x-2">
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     setShowReturnModal(false);
                     setSelectedCarregamentoId(null);
                     setError(null);
                   }}
-                  className="text-xs bg-bg-glacial text-ink-secondary hover:text-ink-primary font-semibold py-2 px-4 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={handleSaveRetorno}
                   disabled={saving}
-                  className="text-xs bg-brand-primary text-white hover:bg-opacity-90 font-semibold py-2 px-4 rounded-glacial transition-all cursor-pointer flex items-center space-x-1.5 shadow-sm disabled:opacity-50"
                 >
-                  {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
+                  {saving ? <Loader2 className="w-3 h-3 animate-spin mr-1.5" /> : null}
                   <span>Confirmar Retorno</span>
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+      </Dialog>
 
       {/* Modal 3: Registrar Novo Carregamento */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-primary/30 backdrop-blur-[2px] animate-fade-in overflow-y-auto">
-          <div className="w-full max-w-2xl bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 animate-scale-in my-8">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.15)] pb-4 mb-4">
-              <div>
-                <h3 className="text-base font-bold text-ink-primary flex items-center space-x-2">
-                  <Truck className="w-5 h-5 text-brand-primary" />
-                  <span>Novo Carregamento: {newTipo === "venda" ? "Venda" : "Patrocínio / Evento"}</span>
-                </h3>
-                <p className="text-xs text-ink-secondary mt-0.5">
-                  Preencha as informações para baixar o estoque e registrar o despacho.
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowAddModal(false);
-                  setAddError(null);
-                }}
-                className="text-ink-secondary hover:text-ink-primary cursor-pointer p-1 text-lg font-bold"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Dialog open={showAddModal} onOpenChange={(open) => {
+        if (!open) {
+          setShowAddModal(false);
+          setAddError(null);
+        }
+      }}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              <Truck className="w-5 h-5 text-brand-primary" />
+              <span>Novo Carregamento: {newTipo === "venda" ? "Venda" : "Patrocínio / Evento"}</span>
+            </DialogTitle>
+          </DialogHeader>
 
             <div className="space-y-4">
               {addError && (
@@ -1163,12 +1148,11 @@ export default function Carregamentos() {
                     {newClienteId === "avulso" && (
                       <div>
                         <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Nome do Cliente Avulso</label>
-                        <input
+                        <Input
                           type="text"
                           placeholder="Ex: João Revendedor, Bar do Porto..."
                           value={newClienteNome}
                           onChange={(e) => setNewClienteNome(e.target.value)}
-                          className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary"
                         />
                       </div>
                     )}
@@ -1179,12 +1163,11 @@ export default function Carregamentos() {
                 {newTipo === "patrocinio" && (
                   <div className="sm:col-span-2">
                     <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Nome do Evento / Destino</label>
-                    <input
+                    <Input
                       type="text"
                       placeholder="Ex: Show de Verão 2026, Patrocínio Atlético Club..."
                       value={newEvento}
                       onChange={(e) => setNewEvento(e.target.value)}
-                      className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary"
                     />
                   </div>
                 )}
@@ -1192,12 +1175,11 @@ export default function Carregamentos() {
                 {/* Motorista */}
                 <div>
                   <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Nome do Motorista</label>
-                  <input
+                  <Input
                     type="text"
                     placeholder="Ex: João da Silva..."
                     value={newMotorista}
                     onChange={(e) => setNewMotorista(e.target.value)}
-                    className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
 
@@ -1369,30 +1351,28 @@ export default function Carregamentos() {
 
               {/* Botões do Modal */}
               <div className="flex items-center justify-end border-t border-[rgba(91,112,120,0.15)] pt-4 mt-4 space-x-2">
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
                   onClick={() => {
                     setShowAddModal(false);
                     setAddError(null);
                   }}
-                  className="text-xs bg-bg-glacial text-ink-secondary hover:text-ink-primary font-semibold py-2 px-4 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={handleSaveCarregamento}
                   disabled={adding}
-                  className="text-xs bg-brand-primary text-white hover:bg-opacity-90 font-semibold py-2 px-4 rounded-glacial transition-all cursor-pointer flex items-center space-x-1.5 shadow-sm disabled:opacity-50"
                 >
-                  {adding && <Loader2 className="w-3 h-3 animate-spin" />}
+                  {adding && <Loader2 className="w-3 h-3 animate-spin mr-1.5" />}
                   <span>Lançar Carregamento</span>
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+      </Dialog>
       {/* Estilos para impressão de romaneio */}
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
@@ -1517,29 +1497,19 @@ export default function Carregamentos() {
         </div>
       )}
       {/* Modal: Registrar Perda */}
-      {showLossModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-primary/30 backdrop-blur-[2px] animate-fade-in">
-          <div className="w-full max-w-md bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-6 animate-scale-in">
-            <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.15)] pb-4 mb-4">
-              <div>
-                <h3 className="text-base font-bold text-ink-primary flex items-center space-x-2">
-                  <AlertCircle className="w-5 h-5 text-rose-500" />
-                  <span>Registrar Perda / Descarte</span>
-                </h3>
-                <p className="text-xs text-ink-secondary mt-0.5">
-                  Deduza do estoque produtos danificados, quebras ou descartes.
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  setShowLossModal(false);
-                  setLossError(null);
-                }}
-                className="text-ink-secondary hover:text-ink-primary cursor-pointer p-1 text-lg font-bold"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Dialog open={showLossModal} onOpenChange={(open) => {
+        if (!open) {
+          setShowLossModal(false);
+          setLossError(null);
+        }
+      }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              <AlertCircle className="w-5 h-5 text-rose-500" />
+              <span>Registrar Perda / Descarte</span>
+            </DialogTitle>
+          </DialogHeader>
 
             <form onSubmit={handleSaveLoss} className="space-y-4">
               {lossError && (
@@ -1629,13 +1599,12 @@ export default function Carregamentos() {
                 {/* Quantidade */}
                 <div>
                   <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Quantidade</label>
-                  <input
+                  <Input
                     type="number"
                     step="any"
                     placeholder="Ex: 10"
                     value={lossQuantidade}
                     onChange={(e) => setLossQuantidade(e.target.value)}
-                    className="w-full bg-bg-glacial text-sm px-3 py-2 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
 
@@ -1670,29 +1639,27 @@ export default function Carregamentos() {
 
               {/* Botões do Modal */}
               <div className="flex items-center justify-end border-t border-[rgba(91,112,120,0.15)] pt-4 mt-4 space-x-2">
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
                   onClick={() => {
                     setShowLossModal(false);
                     setLossError(null);
                   }}
-                  className="text-xs bg-bg-glacial text-ink-secondary hover:text-ink-primary font-semibold py-2 px-4 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer"
                 >
                   Cancelar
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={lossSaving}
-                  className="text-xs bg-brand-primary text-white hover:bg-opacity-90 font-semibold py-2 px-4 rounded-glacial transition-all cursor-pointer flex items-center space-x-1.5 shadow-sm disabled:opacity-50"
                 >
-                  {lossSaving && <Loader2 className="w-3 h-3 animate-spin" />}
+                  {lossSaving && <Loader2 className="w-3 h-3 animate-spin mr-1.5" />}
                   <span>Registrar Perda</span>
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+          </DialogContent>
+      </Dialog>
     </div>
   );
 }
