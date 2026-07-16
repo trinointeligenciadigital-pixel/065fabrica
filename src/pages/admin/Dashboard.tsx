@@ -110,7 +110,7 @@ export default function Dashboard() {
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Estoque Total */}
-        <div className="glass-card interactive-card rounded-glacial p-6 flex items-center justify-between">
+        <div className="glass-card interactive-card rounded-glacial p-6 flex items-center justify-between before:absolute before:top-0 before:left-0 before:right-0 before:h-[2.5px] before:bg-gradient-to-r before:from-sky-400 before:to-sky-600 relative overflow-hidden">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Estoque Total</p>
             <h3 className="text-2xl font-bold text-ink-primary font-mono tracking-tight tabular-nums">
@@ -124,7 +124,9 @@ export default function Dashboard() {
         </div>
 
         {/* Alertas de Reposição */}
-        <div className="glass-card interactive-card rounded-glacial p-6 flex items-center justify-between">
+        <div className={`glass-card interactive-card rounded-glacial p-6 flex items-center justify-between before:absolute before:top-0 before:left-0 before:right-0 before:h-[2.5px] before:bg-gradient-to-r ${
+          data.alertas_estoque_minimo.length > 0 ? "before:from-rose-400 before:to-rose-500" : "before:from-emerald-400 before:to-emerald-500"
+        } relative overflow-hidden`}>
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Alertas de Estoque</p>
             <h3 className={`text-2xl font-bold font-mono tracking-tight ${
@@ -144,7 +146,7 @@ export default function Dashboard() {
         </div>
 
         {/* Câmaras Ativas */}
-        <div className="glass-card interactive-card rounded-glacial p-6 flex items-center justify-between">
+        <div className="glass-card interactive-card rounded-glacial p-6 flex items-center justify-between before:absolute before:top-0 before:left-0 before:right-0 before:h-[2.5px] before:bg-gradient-to-r before:from-cyan-400 before:to-cyan-600 relative overflow-hidden">
           <div className="space-y-1">
             <p className="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Câmaras Frias</p>
             <h3 className="text-2xl font-bold text-ink-primary font-mono tracking-tight">
@@ -249,7 +251,7 @@ export default function Dashboard() {
                         y={prodY}
                         width={barW}
                         height={prodH > 0 ? prodH : 2}
-                        rx="2"
+                        rx="3"
                         className="fill-brand-primary/80 hover:fill-brand-primary transition-all duration-200 cursor-pointer"
                         onMouseEnter={() =>
                           setHoveredBar({
@@ -269,7 +271,7 @@ export default function Dashboard() {
                         y={vendY}
                         width={barW}
                         height={vendH > 0 ? vendH : 2}
-                        rx="2"
+                        rx="3"
                         className="fill-cyan-500/80 hover:fill-cyan-500 transition-all duration-200 cursor-pointer"
                         onMouseEnter={() =>
                           setHoveredBar({
@@ -295,8 +297,8 @@ export default function Dashboard() {
                       width="130"
                       height="38"
                       rx="4"
-                      fill="#12262C"
-                      stroke="rgba(255,255,255,0.15)"
+                      fill="#0F172A"
+                      stroke="rgba(255,255,255,0.1)"
                       strokeWidth="1"
                     />
                     <text
@@ -312,7 +314,7 @@ export default function Dashboard() {
                       x="0"
                       y="-12"
                       textAnchor="middle"
-                      fill="#EEF3F4"
+                      fill="#F1F5F9"
                       style={{ fontSize: "9px", fontFamily: "var(--font-mono)" }}
                     >
                       {hoveredBar.type}: {hoveredBar.value.toLocaleString("pt-BR")} kg
@@ -371,21 +373,21 @@ export default function Dashboard() {
                         <div className="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden flex border border-[rgba(91,112,120,0.05)] shadow-inner">
                           {consolidado.vendas > 0 && (
                             <div
-                              className="h-full bg-cyan-500 hover:opacity-90 transition-all duration-300 cursor-help"
+                              className="h-full bg-gradient-to-r from-cyan-400 to-cyan-500 hover:opacity-90 transition-all duration-300 cursor-help"
                               style={{ width: `${(consolidado.vendas / total) * 100}%` }}
                               title={`Vendas: ${pctVenda}%`}
                             />
                           )}
                           {consolidado.patrocinios > 0 && (
                             <div
-                              className="h-full bg-purple-500 hover:opacity-90 transition-all duration-300 cursor-help"
+                              className="h-full bg-gradient-to-r from-purple-400 to-purple-500 hover:opacity-90 transition-all duration-300 cursor-help"
                               style={{ width: `${(consolidado.patrocinios / total) * 100}%` }}
                               title={`Patrocínios/Eventos: ${pctPatrocinio}%`}
                             />
                           )}
                           {consolidado.perdas > 0 && (
                             <div
-                              className="h-full bg-rose-500 hover:opacity-90 transition-all duration-300 cursor-help"
+                              className="h-full bg-gradient-to-r from-rose-400 to-rose-500 hover:opacity-90 transition-all duration-300 cursor-help"
                               style={{ width: `${(consolidado.perdas / total) * 100}%` }}
                               title={`Perdas/Quebras: ${pctPerda}%`}
                             />
@@ -468,7 +470,7 @@ export default function Dashboard() {
                         {/* Progress Bar */}
                         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-[rgba(91,112,120,0.05)]">
                           <div
-                            className="h-full bg-rose-500 rounded-full transition-all duration-500"
+                            className="h-full bg-gradient-to-r from-rose-400 to-rose-500 rounded-full transition-all duration-500"
                             style={{ width: `${item.porcentagem}%` }}
                           />
                         </div>
@@ -649,7 +651,7 @@ export default function Dashboard() {
                             </div>
                             <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden flex">
                               <div
-                                className="h-full bg-brand-primary rounded-full transition-all duration-500"
+                                className="h-full bg-gradient-to-r from-sky-400 to-sky-600 rounded-full transition-all duration-500"
                                 style={{ width: `${percentage}%` }}
                               />
                             </div>

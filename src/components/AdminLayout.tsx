@@ -81,7 +81,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </button>
           </div>
 
-          {/* Navigation - Polished with left border highlights */}
+          {/* Navigation - Polished with floating pills */}
           <nav className="space-y-1">
             {menuItems.map((item) => {
               const isActive = location === item.href;
@@ -90,8 +90,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <a
                     className={`flex items-center px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all relative ${
                       isActive
-                        ? "bg-white/10 text-white font-semibold border-l-2 border-brand-primary pl-3 rounded-l-none"
-                        : "text-white/70 hover:bg-white/5 hover:text-white border-l-2 border-transparent"
+                        ? "bg-white/10 text-white font-semibold shadow-inner"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white"
                     } ${item.placeholder ? "opacity-40 cursor-not-allowed" : ""} ${
                       isSidebarCollapsed ? "justify-center px-1 space-x-0" : "space-x-3"
                     }`}
@@ -173,8 +173,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                       <a
                         className={`flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all relative ${
                           isActive
-                            ? "bg-white/10 text-white font-semibold border-l-2 border-brand-primary pl-3 rounded-l-none"
-                            : "text-white/70 hover:bg-white/5 hover:text-white border-l-2 border-transparent"
+                            ? "bg-white/10 text-white font-semibold shadow-inner"
+                            : "text-slate-400 hover:bg-white/5 hover:text-white"
                         } ${item.placeholder ? "opacity-40 cursor-not-allowed" : ""}`}
                         onClick={(e) => {
                           if (item.placeholder) {
