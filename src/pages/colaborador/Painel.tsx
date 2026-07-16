@@ -35,6 +35,21 @@ export default function Painel() {
   });
 
   const [tempoRestante, setTempoRestante] = useState("");
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+
+  // Detectar sucesso no lançamento de produção
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("sucesso") === "producao") {
+      setShowSuccessToast(true);
+      const newUrl = window.location.pathname + (camaraSlug ? `?camara=${camaraSlug}` : "");
+      window.history.replaceState({}, document.title, newUrl);
+      const timer = setTimeout(() => {
+        setShowSuccessToast(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [camaraSlug]);
 
   // Efeito para validar e redirecionar se a sessão for inválida
   useEffect(() => {
@@ -95,6 +110,15 @@ export default function Painel() {
   return (
     <div className="min-h-screen bg-bg-glacial font-sans flex flex-col justify-between py-6 px-4 sm:px-6">
       <div className="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center">
+        {showSuccessToast && (
+          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-glacial flex items-center space-x-3 text-xs font-semibold shadow-sm animate-fade-in">
+            <span className="text-base shrink-0">❄️</span>
+            <div className="text-left">
+              <p className="font-bold">Produção lançada com sucesso!</p>
+              <p className="text-emerald-700 font-normal mt-0.5">O saldo físico da câmara foi atualizado.</p>
+            </div>
+          </div>
+        )}
         
         {/* Top Header */}
         <header className="text-center mb-8">

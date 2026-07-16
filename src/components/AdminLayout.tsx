@@ -53,7 +53,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     <div className="min-h-screen bg-bg-glacial font-sans flex flex-col md:flex-row">
       
       {/* Sidebar - Desktop */}
-      <aside className={`hidden md:flex md:flex-col bg-gradient-sidebar text-white border-r border-white/5 justify-between py-6 shrink-0 transition-all duration-300 ${
+      <aside className={`hidden md:flex md:flex-col bg-gradient-sidebar text-white border-r border-white/5 justify-between py-6 shrink-0 transition-all duration-300 sticky top-0 h-screen ${
         isSidebarCollapsed ? "md:w-20 px-3" : "md:w-64 px-4"
       }`}>
         <div>

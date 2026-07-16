@@ -486,109 +486,62 @@ export default function Dashboard() {
 
       </div>
 
-      {/* Detail Grid: Alertas + Câmaras (Esq) / Atividades (Dir) */}
+      {/* Detail Grid: Alertas (Esq) / Atividades (Dir) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Lado Esquerdo: Alertas de Reposição & Estoque por Câmara */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Lado Esquerdo: Alertas de Reposição */}
+        <div className="lg:col-span-2">
           
           {/* Alertas de Reposição */}
-          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5">
-            <div className="flex items-center space-x-2 mb-4">
-              <Layers className="w-4 h-4 text-ink-primary" />
-              <h4 className="text-sm font-bold text-ink-primary">Alertas de Reposição de Estoque</h4>
-            </div>
+          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 h-full flex flex-col justify-between">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Layers className="w-4 h-4 text-ink-primary" />
+                <h4 className="text-sm font-bold text-ink-primary">Alertas de Reposição de Estoque</h4>
+              </div>
 
-            {data.alertas_estoque_minimo.length === 0 ? (
-              <div className="p-4 bg-emerald-50/50 border border-emerald-100 rounded-glacial flex items-center space-x-3 text-emerald-800 text-xs font-medium">
-                <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
-                <div>
-                  <p className="font-bold">Saldos de estoque estáveis</p>
-                  <p className="text-emerald-700/80 mt-0.5">Todos os produtos estão com níveis acima do limite mínimo de segurança cadastrado.</p>
+              {data.alertas_estoque_minimo.length === 0 ? (
+                <div className="p-8 bg-emerald-50/50 border border-emerald-100 rounded-glacial flex items-center space-x-3 text-emerald-800 text-xs font-medium justify-center h-[180px]">
+                  <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <div>
+                    <p className="font-bold text-sm">Saldos de estoque estáveis</p>
+                    <p className="text-emerald-700/80 mt-1">Todos os produtos estão com níveis acima do limite mínimo de segurança cadastrado.</p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {data.alertas_estoque_minimo.map((alert, idx) => (
-                  <div
-                    key={idx}
-                    className={`p-3 border rounded-glacial flex items-center justify-between text-xs transition-all ${
-                      alert.status === "Critico" 
-                        ? "bg-rose-50/50 border-rose-150 text-rose-900" 
-                        : "bg-amber-50/40 border-amber-150 text-amber-900"
-                    }`}
-                  >
-                    <div>
-                      <span className="font-bold block">{alert.produto_nome}</span>
-                      <span className="text-[10px] opacity-80">
-                        Mínimo cadastrado: {alert.estoque_minimo} {alert.unidade}s
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      {alert.status === "Critico" ? (
-                        <span className="inline-flex px-2 py-0.5 rounded bg-rose-600 text-white font-bold text-[9px] uppercase tracking-wider animate-pulse mr-2">
-                          Esgotado
+              ) : (
+                <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                  {data.alertas_estoque_minimo.map((alert, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-3 border rounded-glacial flex items-center justify-between text-xs transition-all ${
+                        alert.status === "Critico" 
+                          ? "bg-rose-50/50 border-rose-150 text-rose-900" 
+                          : "bg-amber-50/40 border-amber-150 text-amber-900"
+                      }`}
+                    >
+                      <div>
+                        <span className="font-bold block text-sm">{alert.produto_nome}</span>
+                        <span className="text-[10px] opacity-80 mt-0.5 block">
+                          Mínimo cadastrado: {alert.estoque_minimo} {alert.unidade}s
                         </span>
-                      ) : (
-                        <span className="inline-flex px-2 py-0.5 rounded bg-amber-500 text-white font-bold text-[9px] uppercase tracking-wider mr-2">
-                          Baixo
-                        </span>
-                      )}
-                      <span className="font-mono font-bold">{alert.saldo} {alert.unidade}s</span>
+                      </div>
+                      <div className="text-right">
+                        {alert.status === "Critico" ? (
+                          <span className="inline-flex px-2 py-0.5 rounded bg-rose-600 text-white font-bold text-[9px] uppercase tracking-wider animate-pulse mr-2">
+                            Esgotado
+                          </span>
+                        ) : (
+                          <span className="inline-flex px-2 py-0.5 rounded bg-amber-500 text-white font-bold text-[9px] uppercase tracking-wider mr-2">
+                            Baixo
+                          </span>
+                        )}
+                        <span className="font-mono font-bold text-sm">{alert.saldo} {alert.unidade}s</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Estoque Detalhado por Câmara */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <ThermometerSnowflake className="w-4 h-4 text-ink-primary" />
-              <h4 className="text-sm font-bold text-ink-primary">Estoque Físico por Câmara Fria</h4>
+                  ))}
+                </div>
+              )}
             </div>
-
-            {data.estoque_detalhado.length === 0 ? (
-              <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-8 text-center text-ink-secondary text-sm">
-                Nenhum estoque localizado nas câmaras da fábrica.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {data.estoque_detalhado.map((cam, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.1)] pb-2 mb-3">
-                        <span className="text-sm font-bold text-ink-primary">{cam.camara_nome}</span>
-                        <span className="text-xs">❄️</span>
-                      </div>
-                      
-                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
-                        {cam.itens.map((item: any, itemIdx: number) => {
-                          const saborDesc = item.sabor_nome ? ` sabor ${item.sabor_nome}` : "";
-                          const formatoDesc = item.formato_nome ? ` (${item.formato_nome})` : "";
-                          const fullDesc = `${item.produto_nome}${saborDesc}${formatoDesc}`;
-
-                          return (
-                            <div key={itemIdx} className="flex justify-between items-center text-xs">
-                              <span className="text-ink-secondary truncate max-w-[170px]" title={fullDesc}>
-                                {fullDesc}
-                              </span>
-                              <span className="font-mono font-semibold text-ink-primary">
-                                {item.quantidade} {item.unidade === "pacote" ? "pct" : "kg"}
-                              </span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
         </div>
@@ -646,6 +599,70 @@ export default function Dashboard() {
           </div>
         </div>
 
+      </div>
+
+      {/* Estoque Detalhado por Câmara - Largura Total */}
+      <div className="space-y-4 pt-4">
+        <div className="flex items-center space-x-2">
+          <ThermometerSnowflake className="w-4 h-4 text-ink-primary" />
+          <h4 className="text-sm font-bold text-ink-primary text-base">Estoque Físico por Câmara Fria</h4>
+        </div>
+
+        {data.estoque_detalhado.length === 0 ? (
+          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-8 text-center text-ink-secondary text-sm">
+            Nenhum estoque localizado nas câmaras da fábrica.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.estoque_detalhado.map((cam, idx) => {
+              const totalQtd = cam.itens.reduce((acc: number, item: any) => acc + item.quantidade, 0);
+              
+              return (
+                <div
+                  key={idx}
+                  className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-glacial p-5 flex flex-col justify-between transition-all hover:translate-y-[-2px] hover:shadow-active"
+                >
+                  <div>
+                    <div className="flex items-center justify-between border-b border-[rgba(91,112,120,0.1)] pb-2.5 mb-3">
+                      <span className="text-sm font-bold text-ink-primary">{cam.camara_nome}</span>
+                      <span className="text-xs font-mono text-[10px] text-ink-secondary bg-bg-glacial px-2 py-0.5 rounded border border-[rgba(91,112,120,0.1)] shrink-0">
+                        {totalQtd.toLocaleString("pt-BR")} itens
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                      {cam.itens.map((item: any, itemIdx: number) => {
+                        const saborDesc = item.sabor_nome ? ` sabor ${item.sabor_nome}` : "";
+                        const formatoDesc = item.formato_nome ? ` (${item.formato_nome})` : "";
+                        const fullDesc = `${item.produto_nome}${saborDesc}${formatoDesc}`;
+                        const percentage = totalQtd > 0 ? Math.round((item.quantidade / totalQtd) * 100) : 0;
+
+                        return (
+                          <div key={itemIdx} className="space-y-1.5 py-1 border-b border-[rgba(91,112,120,0.05)] last:border-b-0">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-ink-secondary truncate max-w-[200px] font-medium" title={fullDesc}>
+                                {fullDesc}
+                              </span>
+                              <span className="font-mono font-semibold text-ink-primary shrink-0 ml-2">
+                                {item.quantidade.toLocaleString("pt-BR")} {item.unidade === "pacote" ? "pct" : "kg"}
+                              </span>
+                            </div>
+                            <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden flex">
+                              <div
+                                className="h-full bg-brand-primary rounded-full transition-all duration-500"
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

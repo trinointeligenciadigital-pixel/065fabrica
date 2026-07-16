@@ -321,6 +321,9 @@ export default function Lancamentos() {
           formatoPacoteId: selectedFormato?._id || undefined,
           quantidade: quantidadeVal,
         });
+        setLoading(false);
+        setLocation("/colaborador/painel?sucesso=producao");
+        return;
       } else if (flow === "perda") {
         await lancarPerdaMutation({
           token,

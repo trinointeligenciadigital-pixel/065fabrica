@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import {
   TrendingUp,
@@ -25,11 +25,72 @@ export default function Movimentacoes() {
   const camaras = useQuery(api.cadastros.listarCamaras);
   const produtos = useQuery(api.cadastros.listarProdutos);
 
+  // Queries auxiliares para o modal de produção
+  const camarasAtivas = useQuery(api.cadastros.listarCamarasAtivas);
+  const produtosAtivos = useQuery(api.cadastros.listarProdutosAtivos);
+  const saboresAtivos = useQuery(api.cadastros.listarSaboresAtivos);
+  const formatosAtivos = useQuery(api.cadastros.listarFormatosPacoteAtivos);
+
   // Estados dos filtros
   const [selectedCamara, setSelectedCamara] = useState<string>("");
   const [selectedProduto, setSelectedProduto] = useState<string>("");
   const [selectedTipo, setSelectedTipo] = useState<string>("");
   const [searchOperador, setSearchOperador] = useState<string>("");
+
+  // Estados para o modal de lançamento de produção pelo Admin
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalCamara, setModalCamara] = useState("");
+  const [modalProduto, setModalProduto] = useState("");
+  const [modalSabor, setModalSabor] = useState("");
+  const [modalFormato, setModalFormato] = useState("");
+  const [modalQuantidade, setModalQuantidade] = useState("");
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
+
+  // Mutation para registrar produção
+  const lancarProducao = useMutation(api.estoque.lancarProducao);
+
+  const selectedProdObj = produtosAtivos?.find(p => p._id === modalProduto);
+  const produtoPrecisaSabor = selectedProdObj?.nome.toLowerCase().includes("saborizado");
+  const produtoPrecisaFormato = selectedProdObj?.unidade === "pacote" && !produtoPrecisaSabor;
+
+  const handleSubmitProducao = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!modalCamara || !modalProduto || !modalQuantidade) {
+      setModalError("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    const qtdVal = parseFloat(modalQuantidade);
+    if (isNaN(qtdVal) || qtdVal <= 0) {
+      setModalError("A quantidade deve ser maior que zero.");
+      return;
+    }
+
+    setModalLoading(true);
+    setModalError(null);
+    try {
+      await lancarProducao({
+        camaraId: modalCamara as any,
+        produtoId: modalProduto as any,
+        saborId: (produtoPrecisaSabor && modalSabor) ? (modalSabor as any) : undefined,
+        formatoPacoteId: (produtoPrecisaFormato && modalFormato) ? (modalFormato as any) : undefined,
+        quantidade: qtdVal,
+      });
+
+      // Sucesso! Limpar form e fechar modal
+      setModalCamara("");
+      setModalProduto("");
+      setModalSabor("");
+      setModalFormato("");
+      setModalQuantidade("");
+      setModalOpen(false);
+    } catch (err: any) {
+      setModalError(err.message || "Erro ao registrar produção.");
+    } finally {
+      setModalLoading(false);
+    }
+  };
 
   // Limpar filtros
   const handleResetFilters = () => {
@@ -168,10 +229,19 @@ export default function Movimentacoes() {
 
   return (
     <div className="animate-fade-in">
-      {/* Title */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-ink-primary tracking-tight">Histórico de Movimentações</h2>
-        <p className="text-sm text-ink-secondary">Monitore e audite todas as transações e fluxos de estoque da fábrica.</p>
+      {/* Title & Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-ink-primary tracking-tight">Histórico de Movimentações</h2>
+          <p className="text-sm text-ink-secondary">Monitore e audite todas as transações e fluxos de estoque da fábrica.</p>
+        </div>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-brand-primary hover:bg-[rgba(14,124,156,0.9)] text-white text-xs font-bold py-2.5 px-4 rounded-glacial active:scale-[0.98] transition-all flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm w-full sm:w-auto h-[40px] shrink-0"
+        >
+          <span>➕</span>
+          <span>Registrar Produção</span>
+        </button>
       </div>
 
       {/* KPI Cards Grid */}
@@ -410,6 +480,152 @@ export default function Movimentacoes() {
           </table>
         )}
       </div>
+
+      {/* Modal de Registro de Produção */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-ink-primary/45 backdrop-blur-sm" onClick={() => setModalOpen(false)} />
+          
+          {/* Card Modal */}
+          <div className="bg-surface-card rounded-glacial border border-[rgba(91,112,120,0.15)] shadow-xl w-full max-w-md p-6 relative z-10 animate-scale-up text-left">
+            <div className="flex justify-between items-center border-b border-[rgba(91,112,120,0.1)] pb-3 mb-4">
+              <h3 className="text-sm font-bold text-ink-primary flex items-center space-x-1.5">
+                <span>❄️</span>
+                <span>Registrar Entrada de Produção</span>
+              </h3>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="text-ink-secondary hover:text-ink-primary font-bold text-sm cursor-pointer p-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {modalError && (
+              <div className="mb-4 p-3 bg-rose-50 text-rose-800 border border-rose-100 rounded text-xs font-semibold">
+                {modalError}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmitProducao} className="space-y-4">
+              {/* Câmara Fria */}
+              <div>
+                <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Câmara Fria *</label>
+                <select
+                  value={modalCamara}
+                  onChange={(e) => setModalCamara(e.target.value)}
+                  className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer text-ink-primary"
+                  required
+                >
+                  <option value="">Selecione a câmara</option>
+                  {camarasAtivas?.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Produto */}
+              <div>
+                <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Produto *</label>
+                <select
+                  value={modalProduto}
+                  onChange={(e) => {
+                    setModalProduto(e.target.value);
+                    setModalSabor("");
+                    setModalFormato("");
+                  }}
+                  className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer text-ink-primary"
+                  required
+                >
+                  <option value="">Selecione o produto</option>
+                  {produtosAtivos?.map((p) => (
+                    <option key={p._id} value={p._id}>
+                      {p.nome} ({p.unidade === "pacote" ? "pacote" : "kg"})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Saborizado Sabor Selection */}
+              {produtoPrecisaSabor && (
+                <div>
+                  <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Sabor *</label>
+                  <select
+                    value={modalSabor}
+                    onChange={(e) => setModalSabor(e.target.value)}
+                    className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer text-ink-primary"
+                    required
+                  >
+                    <option value="">Selecione o sabor</option>
+                    {saboresAtivos?.map((s) => (
+                      <option key={s._id} value={s._id}>
+                        {s.nome}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Formato de Pacote Selection */}
+              {produtoPrecisaFormato && (
+                <div>
+                  <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">Formato de Pacote *</label>
+                  <select
+                    value={modalFormato}
+                    onChange={(e) => setModalFormato(e.target.value)}
+                    className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary cursor-pointer text-ink-primary"
+                    required
+                  >
+                    <option value="">Selecione o formato</option>
+                    {formatosAtivos?.map((f) => (
+                      <option key={f._id} value={f._id}>
+                        {f.nome} ({f.peso_kg} kg)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Quantidade */}
+              <div>
+                <label className="text-[10px] font-bold text-ink-secondary uppercase tracking-wider block mb-1">
+                  Quantidade ({selectedProdObj ? `${selectedProdObj.unidade}s` : "*"})
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  value={modalQuantidade}
+                  onChange={(e) => setModalQuantidade(e.target.value)}
+                  placeholder="Ex: 150"
+                  className="w-full bg-bg-glacial text-sm px-3 py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink-primary"
+                  required
+                />
+              </div>
+
+              {/* Form Actions */}
+              <div className="flex space-x-3 pt-3 border-t border-[rgba(91,112,120,0.1)]">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="flex-1 bg-bg-glacial hover:bg-[rgba(91,112,120,0.08)] text-ink-primary font-bold text-xs py-2.5 rounded-glacial border border-[rgba(91,112,120,0.15)] transition-all cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={modalLoading}
+                  className="flex-1 bg-brand-primary hover:bg-[rgba(14,124,156,0.9)] disabled:opacity-55 text-white font-bold text-xs py-2.5 rounded-glacial transition-all cursor-pointer flex items-center justify-center space-x-1.5"
+                >
+                  {modalLoading ? <span>Salvando...</span> : <span>Gravar Entrada</span>}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

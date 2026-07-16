@@ -81,7 +81,9 @@ export const lancarProducao = mutation({
 
     // Cálculo do peso total em kg
     let pesoTotalKg = args.quantidade;
-    if (produto.unidade === "pacote" && args.formatoPacoteId) {
+    if (produto.nome.toLowerCase().includes("saborizado")) {
+      pesoTotalKg = 5.7 * args.quantidade;
+    } else if (produto.unidade === "pacote" && args.formatoPacoteId) {
       const formato = await ctx.db.get(args.formatoPacoteId);
       if (!formato || !formato.ativo) throw new Error("Formato de pacote inválido ou inativo.");
       pesoTotalKg = formato.peso_kg * args.quantidade;
@@ -140,7 +142,9 @@ export const lancarPerda = mutation({
 
     // Cálculo do peso total
     let pesoTotalKg = args.quantidade;
-    if (produto.unidade === "pacote" && args.formatoPacoteId) {
+    if (produto.nome.toLowerCase().includes("saborizado")) {
+      pesoTotalKg = 5.7 * args.quantidade;
+    } else if (produto.unidade === "pacote" && args.formatoPacoteId) {
       const formato = await ctx.db.get(args.formatoPacoteId);
       if (!formato || !formato.ativo) throw new Error("Formato de pacote inválido ou inativo.");
       pesoTotalKg = formato.peso_kg * args.quantidade;
@@ -233,7 +237,9 @@ export const lancarCarregamento = mutation({
 
       // Calcular peso
       let pesoTotalKg = item.quantidade;
-      if (produto.unidade === "pacote" && item.formatoPacoteId) {
+      if (produto.nome.toLowerCase().includes("saborizado")) {
+        pesoTotalKg = 5.7 * item.quantidade;
+      } else if (produto.unidade === "pacote" && item.formatoPacoteId) {
         const formato = await ctx.db.get(item.formatoPacoteId);
         if (!formato || !formato.ativo) throw new Error("Formato de pacote inválido ou inativo.");
         pesoTotalKg = formato.peso_kg * item.quantidade;
@@ -393,7 +399,7 @@ export const obterDadosDashboard = query({
                 quantidade: saldo,
                 unidade: prod.unidade,
               });
-              pesoTotalEstoque += saldo;
+              pesoTotalEstoque += saldo * 5.7;
               saldosPorProduto[prod._id] = (saldosPorProduto[prod._id] || 0) + saldo;
             }
           }
@@ -628,6 +634,34 @@ export const obterSaldosCamara = query({
     }
 
     return saldos;
+  },
+});
+
+/**
+ * Mutation temporária para corrigir o peso total no histórico das movimentações de Gelo Saborizado.
+ */
+export const corrigirHistoricoSaborizados = mutation({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+    const produtos = await ctx.db.query("produtos").collect();
+    const saborizadosIds = produtos
+      .filter((p) => p.nome.toLowerCase().includes("saborizado"))
+      .map((p) => p._id);
+
+    const movimentacoes = await ctx.db.query("movimentacoes").collect();
+    let totalCorrigidas = 0;
+
+    for (const m of movimentacoes) {
+      if (saborizadosIds.includes(m.produto_id)) {
+        const pesoReal = m.quantidade * 5.7;
+        if (Math.abs(m.peso_total_kg - pesoReal) > 0.01) {
+          await ctx.db.patch(m._id, { peso_total_kg: pesoReal });
+          totalCorrigidas++;
+        }
+      }
+    }
+    return { totalCorrigidas };
   },
 });
 
