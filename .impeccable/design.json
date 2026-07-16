@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-14T12:25:00Z",
+  "generatedAt": "2026-07-16T17:32:00Z",
   "title": "Design System: Estoque 065",
   "extensions": {
     "colorMeta": {
@@ -80,13 +80,18 @@
     "keyCharacteristics": [
       "Foco em usabilidade móvel com keypad virtual otimizado para dedos.",
       "Cores frias de alto contraste inspiradas em gelo, aço e expedição.",
-      "Feedback de confirmação tátil/visual imediato (comprovante estilo romaneio).",
+      "Feedback de confirmação tátil/visual imediato (comprovante estilo romaneio e toasts).",
       "Densidade visual equilibrada (limpa no mobile e bem aproveitada no desktop)."
     ],
     "rules": [
       {
         "name": "The Contrast Rule",
         "body": "Todo texto principal ou botão de ação deve manter contraste superior a 4.5:1 contra a sua cor de superfície de fundo. Cores pastéis fracas são expressamente proibidas para rótulos de leitura.",
+        "section": "colors"
+      },
+      {
+        "name": "The Chamber Product Constraint Rule",
+        "body": "Sempre que uma câmara fria for selecionada em qualquer parte do sistema (módulo de lançamento, inventário ou filtros), as seleções de produtos devem ser restritas exclusivamente aos itens cadastrados para aquela câmara específica, evitando erros de entrada de dados e poluição visual.",
         "section": "colors"
       },
       {
@@ -103,7 +108,8 @@
     "dos": [
       "Do Manter botões de ação com altura mínima de 48px em todas as telas acessadas por celulares para facilitar o clique dos operadores.",
       "Do Utilizar números monoespaçados (.tabular-nums) para todo dado numérico de estoque ou de pesagem.",
-      "Do Garantir contraste de no mínimo 4.5:1 nas cores de texto contra o fundo do card ou tela."
+      "Do Garantir contraste de no mínimo 4.5:1 nas cores de texto contra o fundo do card ou tela.",
+      "Do Filtrar as listas de seleção de produtos assim que a câmara de destino for selecionada."
     ],
     "donts": [
       "Don't Utilizar bordas laterais coloridas maiores que 1px (side-stripes) como detalhes decorativos em alertas ou cards.",
